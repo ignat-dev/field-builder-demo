@@ -1,0 +1,38 @@
+{
+  "name": "quickbase-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "next build --turbopack",
+    "dev": "next dev --turbopack",
+    "lint": "eslint",
+    "lint-fix": "npm run lint -- --fix",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^15",
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9",
+    "@next/eslint-plugin-next": "^15",
+    "@stylistic/eslint-plugin": "^1",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "eslint": "^9",
+    "eslint-config-next": "^15",
+    "eslint-plugin-react": "^7",
+    "sass-embedded": "^1",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=9"
+  }
+}
