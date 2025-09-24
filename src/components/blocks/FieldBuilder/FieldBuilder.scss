@@ -1,0 +1,45 @@
+.field-builder {
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+
+  > .card {
+    > .card-body {
+      padding: 1rem 2rem;
+
+      > form {
+        align-items: center;
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: max-content 1fr;
+        width: max-content;
+
+        > .form__field {
+          align-items: center;
+          display: flex;
+          gap: 1rem;
+          justify-content: space-between;
+        }
+
+        > .form__actions {
+          align-items: center;
+          display: flex;
+          gap: 0.75rem;
+          grid-column: 2;
+          margin-bottom: 3rem;
+          margin-top: 1rem;
+
+          > .btn {
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+          }
+
+          > .btn-link {
+            padding: 0;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+}

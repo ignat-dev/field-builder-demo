@@ -1,0 +1,123 @@
+"use client"
+
+import { useState } from "react"
+
+import "./FieldBuilder.scss"
+
+export default function FieldBuilder() {
+  const [choices, setChoices] = useState(["Asia", "Australia", "Europe", "Americas", "Africa"])
+  const [defaultValue, setDefaultValue] = useState("Asia")
+  const [label, setLabel] = useState("Sales Region")
+  const [order, setOrder] = useState("alphabetical")
+  const [required, setRequired] = useState(true)
+
+  return (
+    <div className="field-builder">
+      <div className="card">
+        <div className="card-header">
+          Field Builder
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="inputLabel">Label</label>
+            <div className="form__field">
+              <input
+                className="form-control"
+                id="inputLabel"
+                value={label}
+                onChange={onChangeLabel}
+              />
+            </div>
+
+            <label>Type</label>
+            <div className="form__field">
+              <span>Multi-select</span>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  checked={required}
+                  id="inputType"
+                  type="checkbox"
+                  onChange={onChangeRequired}
+                />
+                <label className="form-check-label" htmlFor="inputType">
+                  A Value is required
+                </label>
+              </div>
+            </div>
+
+            <label htmlFor="inputDefaultValue">Default Value</label>
+            <div className="form__field">
+              <input
+                className="form-control"
+                id="inputDefaultValue"
+                value={defaultValue}
+                onChange={onChangeDefaultValue}
+              />
+            </div>
+
+            <label htmlFor="selectChoices" className="align-self-start">Choices</label>
+            <div className="form__field">
+              <select className="form-select" id="selectChoices" size={6}>
+                {choices.map((x, idx) => (
+                  <option key={idx} value={x}>{x}</option>
+                ))}
+              </select>
+            </div>
+
+            <label htmlFor="selectOrder">Order</label>
+            <div className="form__field">
+              <select className="form-select" id="selectOrder" value={order} onChange={onChangeOrder}>
+                <option value="original">Display choices in original order</option>
+                <option value="alphabetical">Display choices in Alphabetical</option>
+              </select>
+            </div>
+
+            <div className="form__actions">
+              <button className="btn btn-success" type="submit">
+                Save changes
+              </button>
+              {" Or "}
+              <button className="btn btn-link text-danger" type="button" onClick={handleClear}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  )
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+
+    const data = { label, type: "multi-select", required, defaultValue, choices, order }
+
+    console.log("Submitting form data..", data)
+  }
+
+  function handleClear() {
+    console.log("Clearing form data..")
+    setLabel("")
+    setRequired(false)
+    setDefaultValue("")
+    setChoices([])
+    setOrder("")
+  }
+
+  function onChangeLabel(e: React.ChangeEvent<HTMLInputElement>) {
+    setLabel(e.target.value)
+  }
+
+  function onChangeRequired(e: React.ChangeEvent<HTMLInputElement>) {
+    setRequired(e.target.checked)
+  }
+
+  function onChangeDefaultValue(e: React.ChangeEvent<HTMLInputElement>) {
+    setDefaultValue(e.target.value)
+  }
+
+  function onChangeOrder(e: React.ChangeEvent<HTMLSelectElement>) {
+    setOrder(e.target.value)
+  }
+}
