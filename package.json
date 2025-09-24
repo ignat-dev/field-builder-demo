@@ -11,8 +11,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "bootstrap": "^5",
     "next": "^15",
     "react": "^19",
+    "react-bootstrap": "^2",
     "react-dom": "^19"
   },
   "devDependencies": {
