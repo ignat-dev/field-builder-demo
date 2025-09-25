@@ -1,12 +1,12 @@
 "use client"
 
+import { MAX_CHOICES_COUNT } from "@/common/constants"
+import type { FieldData } from "@/types"
 import { useMemo, useState } from "react"
 
 import "./FieldBuilder.scss"
 
 export default function FieldBuilder() {
-  const MAX_CHOICES_COUNT = 50
-
   const [choices, setChoices] = useState(["Asia", "Australia", "Europe", "Americas", "Africa"])
   const [defaultValue, setDefaultValue] = useState("Asia")
   const [label, setLabel] = useState("Sales Region")
@@ -135,13 +135,13 @@ export default function FieldBuilder() {
       setChoices(choicesList)
     }
 
-    const data = {
+    const data: Omit<FieldData, "id"> = {
       label,
       type: "multi-select",
       required,
-      defaultValue,
+      default: defaultValue,
       choices: choicesList,
-      order,
+      displayAlpha: order === "alphabetical",
     }
 
     console.log("Submitting form data..", data)
