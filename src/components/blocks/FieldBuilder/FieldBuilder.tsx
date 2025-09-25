@@ -4,7 +4,7 @@ import { MAX_CHOICES_COUNT } from "@/common/constants"
 import { getField, saveField } from "@/lib/api"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 import "./FieldBuilder.scss"
 
@@ -27,15 +27,21 @@ export default function FieldBuilder() {
   const errorFields = useMemo(() => new Set(errors.map(e => e.field)), [errors])
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
+  const getOrderedList = useCallback((list: Array<string>, listOrder: string): Array<string> => {
+    return (listOrder === "alphabetical") ? [...list].sort((x, y) => x.localeCompare(y)) : list
+  }, [])
+
   useEffect(() => {
     getField("123").then(fieldData => {
+      const order = fieldData.displayAlpha ? "alphabetical" : "original"
+
       setLabel(fieldData.label ?? "")
       setRequired(fieldData.required ?? false)
       setDefaultValue(fieldData.default ?? "")
-      setChoices(fieldData.choices)
-      setOrder(fieldData.displayAlpha ? "alphabetical" : "original")
+      setChoices(getOrderedList(fieldData.choices ?? [], order))
+      setOrder(order)
     }).finally(() => setIsLoading(false))
-  }, [])
+  }, [getOrderedList])
 
   return (
     <div className="field-builder">
@@ -174,8 +180,8 @@ export default function FieldBuilder() {
     let choicesList = choices
 
     if (defaultValue && !choicesList.includes(defaultValue)) {
-      choicesList = [defaultValue, ...choicesList]
-      setChoices(choicesList)
+      choicesList = updateChoicesList([defaultValue, ...choicesList])
+      setSelectedChoice(defaultValue)
     }
 
     const data: FieldData = {
@@ -234,7 +240,14 @@ export default function FieldBuilder() {
   }
 
   function onChangeOrder(e: React.ChangeEvent<HTMLSelectElement>) {
-    setOrder(e.target.value)
+    const prevOrder = order
+    const nextOrder = e.target.value as typeof orderOptions[number]["value"]
+
+    setOrder(nextOrder)
+
+    if (prevOrder === "original" && nextOrder === "alphabetical") {
+      updateChoicesList(choices, nextOrder)
+    }
   }
 
   function onAddChoice() {
@@ -242,7 +255,7 @@ export default function FieldBuilder() {
 
     if (choice) {
       if (!choices.includes(choice)) {
-        setChoices([...choices, choice])
+        updateChoicesList([...choices, choice])
         setSelectedChoice(choice)
       } else {
         alert(`A choice "${choice}" already exists, please enter a different name.`)
@@ -259,5 +272,15 @@ export default function FieldBuilder() {
       setChoices(updated)
       setSelectedChoice(updated[nextIndex] || "")
     }
+  }
+
+  function updateChoicesList(list: Array<string>, listOrder?: string): Array<string> {
+    setChoices(getOrderedList(list, listOrder ?? order))
+
+    if (selectedChoice && !list.includes(selectedChoice)) {
+      setSelectedChoice("")
+    }
+
+    return list
   }
 }
