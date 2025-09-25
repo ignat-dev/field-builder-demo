@@ -128,7 +128,21 @@ export default function FieldBuilder() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    const data = { label, type: "multi-select", required, defaultValue, choices, order }
+    let choicesList = choices
+
+    if (defaultValue && !choicesList.includes(defaultValue)) {
+      choicesList = [defaultValue, ...choicesList]
+      setChoices(choicesList)
+    }
+
+    const data = {
+      label,
+      type: "multi-select",
+      required,
+      defaultValue,
+      choices: choicesList,
+      order,
+    }
 
     console.log("Submitting form data..", data)
   }
