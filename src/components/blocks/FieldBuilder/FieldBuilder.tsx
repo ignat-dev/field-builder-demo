@@ -1,20 +1,36 @@
 "use client"
 
 import { MAX_CHOICES_COUNT } from "@/common/constants"
+import { getField, saveField } from "@/lib/api"
 import type { FieldData } from "@/types"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import "./FieldBuilder.scss"
 
 export default function FieldBuilder() {
-  const [choices, setChoices] = useState(["Asia", "Australia", "Europe", "Americas", "Africa"])
-  const [defaultValue, setDefaultValue] = useState("Asia")
-  const [label, setLabel] = useState("Sales Region")
-  const [order, setOrder] = useState("alphabetical")
-  const [required, setRequired] = useState(true)
+  const orderOptions = [
+    { value: "original", label: "Display choices in original order" },
+    { value: "alphabetical", label: "Display choices in Alphabetical" },
+  ]
 
-  const [selectedChoice, setSelectedChoice] = useState("")
+  const [choices, setChoices] = useState<Array<string>>([])
+  const [defaultValue, setDefaultValue] = useState<string>("")
+  const [label, setLabel] = useState<string>("")
+  const [order, setOrder] = useState<typeof orderOptions[number]["value"]>("original")
+  const [required, setRequired] = useState<boolean>(false)
+
+  const [selectedChoice, setSelectedChoice] = useState<string>("")
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
+
+  useEffect(() => {
+    getField("123").then(fieldData => {
+      setLabel(fieldData.label ?? "")
+      setRequired(fieldData.required ?? false)
+      setDefaultValue(fieldData.default ?? "")
+      setChoices(fieldData.choices)
+      setOrder(fieldData.displayAlpha ? "alphabetical" : "original")
+    })
+  }, [])
 
   return (
     <div className="field-builder">
@@ -105,8 +121,11 @@ export default function FieldBuilder() {
             <label htmlFor="selectOrder">Order</label>
             <div className="form__field">
               <select className="form-select" id="selectOrder" value={order} onChange={onChangeOrder}>
-                <option value="original">Display choices in original order</option>
-                <option value="alphabetical">Display choices in Alphabetical</option>
+                {orderOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -145,6 +164,12 @@ export default function FieldBuilder() {
     }
 
     console.log("Submitting form data..", data)
+
+    saveField(data).then(() => {
+      console.log("Field data saved successfully.")
+    }).catch(() => {
+      console.error("An unexpected error occurred while saving the field data.")
+    })
   }
 
   function handleClear() {
@@ -153,7 +178,7 @@ export default function FieldBuilder() {
     setRequired(false)
     setDefaultValue("")
     setChoices([])
-    setOrder("")
+    setOrder("original")
   }
 
   function onChangeLabel(e: React.ChangeEvent<HTMLInputElement>) {
