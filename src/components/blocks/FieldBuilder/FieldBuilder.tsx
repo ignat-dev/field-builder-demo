@@ -19,6 +19,8 @@ export default function FieldBuilder() {
   const [order, setOrder] = useState<typeof orderOptions[number]["value"]>("original")
   const [required, setRequired] = useState<boolean>(false)
 
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
   const [selectedChoice, setSelectedChoice] = useState<string>("")
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
@@ -29,17 +31,24 @@ export default function FieldBuilder() {
       setDefaultValue(fieldData.default ?? "")
       setChoices(fieldData.choices)
       setOrder(fieldData.displayAlpha ? "alphabetical" : "original")
-    })
+    }).finally(() => setIsLoading(false))
   }, [])
 
   return (
     <div className="field-builder">
+      {isLoading && (
+        <div className="field-builder__overlay">
+          <span className="spinner-border text-primary" />
+          <span>Loading, please wait...</span>
+        </div>
+      )}
       <div className="card card--form-wrapper">
         <div className="card-header">
           Field Builder
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
+          <fieldset disabled={isSaving}>
             <label htmlFor="inputLabel">Label</label>
             <div className="form__field">
               <input
@@ -130,14 +139,16 @@ export default function FieldBuilder() {
             </div>
 
             <div className="form__actions">
-              <button className="btn btn-success" type="submit">
-                Save changes
+              <button className="btn btn-success" disabled={isSaving} type="submit">
+                <span className={isSaving ? "spinner-border spinner-border-sm" : ""} />
+                <span>{isSaving ? "Saving..." : "Save changes"}</span>
               </button>
               {" Or "}
-              <button className="btn btn-danger btn-link" type="button" onClick={handleClear}>
+              <button className="btn btn-danger btn-link" disabled={isSaving} type="button" onClick={handleClear}>
                 Cancel
               </button>
             </div>
+          </fieldset>
           </form>
         </div>
       </div>
@@ -164,11 +175,14 @@ export default function FieldBuilder() {
     }
 
     console.log("Submitting form data..", data)
+    setIsSaving(true)
 
     saveField(data).then(() => {
       console.log("Field data saved successfully.")
     }).catch(() => {
       console.error("An unexpected error occurred while saving the field data.")
+    }).finally(() => {
+      setIsSaving(false)
     })
   }
 
