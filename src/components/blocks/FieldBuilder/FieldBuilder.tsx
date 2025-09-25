@@ -1,15 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import "./FieldBuilder.scss"
 
 export default function FieldBuilder() {
+  const MAX_CHOICES_COUNT = 50
+
   const [choices, setChoices] = useState(["Asia", "Australia", "Europe", "Americas", "Africa"])
   const [defaultValue, setDefaultValue] = useState("Asia")
   const [label, setLabel] = useState("Sales Region")
   const [order, setOrder] = useState("alphabetical")
   const [required, setRequired] = useState(true)
+
+  const [selectedChoice, setSelectedChoice] = useState("")
+  const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
   return (
     <div className="field-builder">
@@ -58,11 +63,43 @@ export default function FieldBuilder() {
 
             <label htmlFor="selectChoices">Choices</label>
             <div className="form__field form__field--vertical">
-              <select className="form-select" id="selectChoices" size={6}>
-                {choices.map((x, idx) => (
-                  <option key={idx} value={x}>{x}</option>
-                ))}
+              <select
+                className="form-select"
+                id="selectChoices"
+                size={6}
+                value={selectedChoice}
+                onInput={onChangeSelectedChoice}
+              >
+                {choices.length === 0 ? (
+                  <option disabled={true}>&nbsp;</option>
+                ) : (
+                  choices.map((x) => (
+                    <option key={x} value={x}>{x}</option>
+                  ))
+                )}
               </select>
+              <div className="form__field-actions">
+                <span title={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}>
+                  <button
+                    className="btn btn-outline-light btn-sm"
+                    disabled={maxChoicesLimitReached}
+                    type="button"
+                    onClick={onAddChoice}
+                  >
+                    Add
+                  </button>
+                </span>
+                <span title={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}>
+                  <button
+                    className="btn btn-outline-light btn-sm"
+                    disabled={!selectedChoice}
+                    type="button"
+                    onClick={onRemoveChoice}
+                  >
+                    Remove
+                  </button>
+                </span>
+              </div>
             </div>
 
             <label htmlFor="selectOrder">Order</label>
@@ -117,7 +154,35 @@ export default function FieldBuilder() {
     setDefaultValue(e.target.value)
   }
 
+  function onChangeSelectedChoice(e: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedChoice(e.target.value)
+  }
+
   function onChangeOrder(e: React.ChangeEvent<HTMLSelectElement>) {
     setOrder(e.target.value)
+  }
+
+  function onAddChoice() {
+    const choice = prompt("Enter choice name:")
+
+    if (choice) {
+      if (!choices.includes(choice)) {
+        setChoices([...choices, choice])
+        setSelectedChoice(choice)
+      } else {
+        alert(`A choice "${choice}" already exists, please enter a different name.`)
+      }
+    }
+  }
+
+  function onRemoveChoice() {
+    if (selectedChoice) {
+      const currentIndex = choices.indexOf(selectedChoice)
+      const updated = choices.filter(c => c !== selectedChoice)
+      const nextIndex = currentIndex < updated.length ? currentIndex : Math.max(0, updated.length - 1)
+
+      setChoices(updated)
+      setSelectedChoice(updated[nextIndex] || "")
+    }
   }
 }

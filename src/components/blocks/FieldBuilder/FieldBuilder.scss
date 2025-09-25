@@ -28,6 +28,21 @@
             flex-direction: column;
             row-gap: calc(0.5 * var(--theme-card-spacing-y));
           }
+
+          > .form__field-actions {
+            align-items: center;
+            display: flex;
+            gap: calc(0.25 * var(--theme-card-spacing-x));
+
+            > * {
+              display: inline-block;
+              flex: 1;
+
+              > button {
+                width: 100%;
+              }
+            }
+          }
         }
 
         > .form__actions {
