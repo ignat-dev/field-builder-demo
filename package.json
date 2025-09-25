@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap": "^5",
+    "firebase": "^12.3.0",
     "next": "^15",
     "react": "^19",
     "react-bootstrap": "^2",

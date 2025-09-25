@@ -1,24 +1,18 @@
+import { db } from "@/lib/firebase"
 import { validateFieldData } from "@/lib/validation"
 import { FieldData } from "@/types"
+import { ref, get, push, set } from "firebase/database"
+
+const DB_NAME = "fields"
 
 export async function getField(id: string): Promise<FieldData> {
-  return {
-    id: id,
-    label: "Sales region",
-    type: "multi-select",
-    required: false,
-    default: "North America",
-    choices: [
-      "Asia",
-      "Australia",
-      "Western Europe",
-      "North America",
-      "Eastern Europe",
-      "Latin America",
-      "Middle East and Africa"
-    ],
-    displayAlpha: true,
+  const snapshot = await get(ref(db, `${DB_NAME}/${id}`))
+
+  if (!snapshot.exists()) {
+    throw new Error(`Field with ID "${id}" not found.`)
   }
+
+  return snapshot.val()
 }
 
 export async function saveField(fieldData: FieldData): Promise<{ errors?: Array<string>; success?: boolean }> {
@@ -30,7 +24,9 @@ export async function saveField(fieldData: FieldData): Promise<{ errors?: Array<
     return { errors: errors.map(e => e.message) }
   }
 
-  // TODO: Add the code here to call the API.
+  const fieldRef = fieldData.id ? ref(db, `${DB_NAME}/${fieldData.id}`) : push(ref(db, DB_NAME))
+
+  await set(fieldRef, fieldData)
 
   return { success: true }
 }
