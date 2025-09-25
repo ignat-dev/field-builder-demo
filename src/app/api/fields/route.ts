@@ -9,13 +9,15 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { error } = await saveField(data)
+    const { errors, success } = await saveField(data)
 
-    if (error) {
+    if (errors && errors.length > 0) {
+      const error = ["Validation errors found:", ...errors.map((x) => `- ${x}`)].join("\n")
+
       return NextResponse.json({ error }, { status: 400 })
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success })
   } catch {
     return NextResponse.json({ error: "Failed to save field data." }, { status: 500 })
   }

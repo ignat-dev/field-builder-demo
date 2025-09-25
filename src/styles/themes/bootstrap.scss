@@ -3,6 +3,10 @@
 :root {
   --background-color: var(--bs-white);
   --foreground-color: var(--bs-black);
+  --theme-color-danger: var(--bs-danger);
+  --theme-color-info: var(--bs-info);
+  --theme-color-success: var(--bs-success);
+  --theme-color-warning: var(--bs-warning);
   --theme-spacing-x: 1rem;
   --theme-spacing-y: 1rem;
 }
@@ -79,12 +83,13 @@
   }
 }
 
-.card.card--form-wrapper {
+.card.form-wrapper {
   --bs-card-border-color: #CBEAF2;
   --bs-card-cap-bg: #DCEDF6;
   --bs-card-cap-color: #346C90;
   --bs-border-color: #CCC;
   --bs-border-width: 1.5px;
+  --theme-card-border-width: var(--bs-border-width);
   --theme-card-spacing-x: calc(2 * var(--theme-spacing-x));
   --theme-card-spacing-y: calc(0.75 * var(--theme-spacing-y));
 
@@ -94,7 +99,7 @@
 
   > .card-body {
     --bs-card-spacer-x: var(--theme-card-spacing-x);
-    --bs-card-spacer-y: var(--theme-card-spacing-y);
+    --bs-card-spacer-y: calc(2 * var(--theme-card-spacing-y));
 
     font-weight: 400;
   }

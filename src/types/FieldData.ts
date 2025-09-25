@@ -1,5 +1,5 @@
 export interface FieldData {
-  id: string
+  id?: string
   label: string
   type: "multi-select" | "single-select"
   required?: boolean

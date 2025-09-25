@@ -18,6 +18,49 @@
   }
 
   > .card {
+    > .card-notification {
+      align-items: center;
+      background-color: var(--notification-bg-color);
+      border-bottom: var(--theme-card-border-width) solid var(--notification-border-color);
+      color: var(--notification-color);
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      column-gap: var(--theme-spacing-x);
+      row-gap: calc(0.5 * var(--theme-spacing-y));
+      padding: var(--theme-card-spacing-y) var(--theme-card-spacing-x);
+      position: relative;
+
+      > * {
+        grid-column: 2;
+        margin: 0;
+      }
+
+      &::before {
+        background-color: var(--notification-color);
+        content: "";
+        display: inline-block;
+        flex-shrink: 0;
+        grid-column: 1;
+        height: 2rem;
+        mask: var(--notification-icon) no-repeat center/contain;
+        width: 2rem;
+      }
+
+      @each $type, $value in (
+        "danger": var(--bs-danger),
+        "info": var(--bs-info),
+        "success": var(--bs-success),
+        "warning": var(--bs-warning),
+      ) {
+        &.type-#{$type} {
+          --notification-bg-color: color-mix(in srgb, #{$value}, #FFF 80%);
+          --notification-border-color: color-mix(in srgb, #{$value}, #FFF 60%);
+          --notification-color: color-mix(in srgb, #{$value}, #000 60%);
+          --notification-icon: url("../../../assets/icons/notifications/#{$type}.svg");
+        }
+      }
+    }
+
     > .card-body {
       > form > fieldset {
         align-items: center;

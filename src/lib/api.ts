@@ -4,7 +4,7 @@ export async function getField(id: string): Promise<FieldData> {
   return makeRequest<FieldData>(`/api/fields/${id}`)
 }
 
-export async function saveField(fieldData: Omit<FieldData, "id">): Promise<void> {
+export async function saveField(fieldData: FieldData): Promise<void> {
   return makeRequest("/api/fields", {
     method: "POST",
     body: JSON.stringify(fieldData),

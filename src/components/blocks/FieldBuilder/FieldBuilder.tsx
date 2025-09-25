@@ -2,7 +2,8 @@
 
 import { MAX_CHOICES_COUNT } from "@/common/constants"
 import { getField, saveField } from "@/lib/api"
-import type { FieldData } from "@/types"
+import { validateFieldData } from "@/lib/validation"
+import type { FieldData, ValidationError } from "@/types"
 import { useEffect, useMemo, useState } from "react"
 
 import "./FieldBuilder.scss"
@@ -19,9 +20,11 @@ export default function FieldBuilder() {
   const [order, setOrder] = useState<typeof orderOptions[number]["value"]>("original")
   const [required, setRequired] = useState<boolean>(false)
 
+  const [errors, setErrors] = useState<Array<ValidationError>>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [selectedChoice, setSelectedChoice] = useState<string>("")
+  const errorFields = useMemo(() => new Set(errors.map(e => e.field)), [errors])
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
   useEffect(() => {
@@ -42,18 +45,25 @@ export default function FieldBuilder() {
           <span>Loading, please wait...</span>
         </div>
       )}
-      <div className="card card--form-wrapper">
+      <div className="card form-wrapper">
         <div className="card-header">
           Field Builder
         </div>
+        {errors.length > 0 && (
+          <div className="card-notification type-danger">
+            <p>Please correct the following errors and try again:</p>
+            <ul>{errors.map((error, index) => <li key={index}>{error.message}</li>)}</ul>
+          </div>
+        )}
         <div className="card-body">
           <form onSubmit={handleSubmit}>
           <fieldset disabled={isSaving}>
             <label htmlFor="inputLabel">Label</label>
             <div className="form__field">
               <input
-                className="form-control"
+                className={`form-control${errorFields.has("label") ? " is-invalid" : ""}`}
                 id="inputLabel"
+                name="label"
                 value={label}
                 onChange={onChangeLabel}
               />
@@ -67,6 +77,7 @@ export default function FieldBuilder() {
                   className="form-check-input"
                   checked={required}
                   id="inputType"
+                  name="required"
                   type="checkbox"
                   onChange={onChangeRequired}
                 />
@@ -79,8 +90,9 @@ export default function FieldBuilder() {
             <label htmlFor="inputDefaultValue">Default Value</label>
             <div className="form__field">
               <input
-                className="form-control"
+                className={`form-control${errorFields.has("default") ? " is-invalid" : ""}`}
                 id="inputDefaultValue"
+                name="default"
                 value={defaultValue}
                 onChange={onChangeDefaultValue}
               />
@@ -89,8 +101,9 @@ export default function FieldBuilder() {
             <label htmlFor="selectChoices">Choices</label>
             <div className="form__field form__field--vertical">
               <select
-                className="form-select"
+                className={`form-select${errorFields.has("choices") ? " is-invalid" : ""}`}
                 id="selectChoices"
+                name="choices"
                 size={6}
                 value={selectedChoice}
                 onInput={onChangeSelectedChoice}
@@ -155,7 +168,7 @@ export default function FieldBuilder() {
     </div>
   )
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
     let choicesList = choices
@@ -165,7 +178,7 @@ export default function FieldBuilder() {
       setChoices(choicesList)
     }
 
-    const data: Omit<FieldData, "id"> = {
+    const data: FieldData = {
       label,
       type: "multi-select",
       required,
@@ -174,16 +187,25 @@ export default function FieldBuilder() {
       displayAlpha: order === "alphabetical",
     }
 
-    console.log("Submitting form data..", data)
-    setIsSaving(true)
+    const { errors } = validateFieldData(data)
 
-    saveField(data).then(() => {
+    if (errors.length > 0) {
+      return setErrors(errors)
+    } else {
+      setErrors([])
+    }
+
+    console.log("Submitting form data..", data)
+
+    try {
+      setIsSaving(true)
+      await saveField(data)
       console.log("Field data saved successfully.")
-    }).catch(() => {
-      console.error("An unexpected error occurred while saving the field data.")
-    }).finally(() => {
+    } catch (ex) {
+      console.error("An unexpected error occurred while saving the field data.", ex)
+    } finally {
       setIsSaving(false)
-    })
+    }
   }
 
   function handleClear() {
