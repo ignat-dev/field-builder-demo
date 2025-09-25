@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
-import "bootstrap/dist/css/bootstrap.min.css"
-import "./globals.css"
+import "../styles/themes/bootstrap.scss"
+import "../styles/main.scss"
 
 export const metadata: Metadata = {
   title: "Quickbase Field Builder",

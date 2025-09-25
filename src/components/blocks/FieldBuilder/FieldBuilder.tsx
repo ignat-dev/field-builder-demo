@@ -13,7 +13,7 @@ export default function FieldBuilder() {
 
   return (
     <div className="field-builder">
-      <div className="card">
+      <div className="card card--form-wrapper">
         <div className="card-header">
           Field Builder
         </div>
@@ -56,8 +56,8 @@ export default function FieldBuilder() {
               />
             </div>
 
-            <label htmlFor="selectChoices" className="align-self-start">Choices</label>
-            <div className="form__field">
+            <label htmlFor="selectChoices">Choices</label>
+            <div className="form__field form__field--vertical">
               <select className="form-select" id="selectChoices" size={6}>
                 {choices.map((x, idx) => (
                   <option key={idx} value={x}>{x}</option>
@@ -78,7 +78,7 @@ export default function FieldBuilder() {
                 Save changes
               </button>
               {" Or "}
-              <button className="btn btn-link text-danger" type="button" onClick={handleClear}>
+              <button className="btn btn-danger btn-link" type="button" onClick={handleClear}>
                 Cancel
               </button>
             </div>
