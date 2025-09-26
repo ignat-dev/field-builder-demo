@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Field Builder Demo
 
-First, run the development server:
+This is a dynamic form builder UI, with Firebase Realtime Database integration, available for preview at:
+
+[https://field-builder-demo.web.app](https://field-builder-demo.web.app)
+
+
+## 📁 Project Structure
+
+```text
+/
+├── public/                  # Static assets (favicons, SVGs, etc.)
+├── src/                     
+│   ├── app/                 # Next.js app directory (routing, pages, layout)
+│   │   └── api/             # API route handlers (local dev only)
+│   ├── assets/              # Project images, icons, and other assets
+│   ├── common/              # Shared constants and helpers
+│   ├── components/          # Reusable UI components
+│   ├── lib/                 # App logic and utilities
+│   │   ├── api.ts           # API client (frontend)
+│   │   ├── firebase.ts      # Firebase reusable exports
+│   │   └── validation.ts    # Data validation logic
+│   ├── services/            # Service modules (external APIs, business logic)
+│   ├── styles/              # Global styles and themes
+│   └── types/               # TypeScript type definitions
+├── eslint.config.js         # ESLint configuration
+├── firebase.config.json     # Firebase project details
+├── firebase.json            # Firebase hosting configuration
+├── next.config.ts           # Next.js configuration
+├── package.json             # Project metadata and scripts
+└── tsconfig.json            # TypeScript configuration
+```
+
+
+## 🛠️ Tech Stack
+
+- **Next.js:** React framework for server-side rendering, routing, and static export
+- **React:** UI library for building interactive user interfaces
+- **Bootstrap:** CSS framework for responsive design and UI components
+- **TypeScript:** Typed superset of JavaScript for safer and maintainable code
+- **SCSS:** CSS preprocessor for writing modular and maintainable styles
+- **ESLint:** Linting tool for code quality and consistency
+- **Firebase Realtime Database:** Cloud-hosted NoSQL database for real-time data sync
+- **Firebase Hosting:** Static site hosting with CDN and HTTPS
+
+
+## 💻 Local Development
+
+Start the following command to start the dev server and open 
+[http://localhost:3000](http://localhost:3000) to view the app.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command                | Description                         |
+|------------------------|-------------------------------------|
+| `npm run dev`          | Start development server            |
+| `npm run build`        | Build for production                |
+| `npm run start`        | Start production server             |
+| `npm run lint`         | Run ESLint checks                   |
+| `npm run lint-fix`     | Fix ESLint issues                   |
+| `npm run deploy`       | Deploy to Firebase Hosting          |
 
-## Learn More
+
+## ⚙️ Environment Variables
+
+Copy `.env.template` to `.env.local` (for dev) or `.env.production` (for prod) and set the `NEXT_PUBLIC_API_URL` variable to `/api` for local development, or to a Firebase Realtime Database URL for production.
+
+**Note:** All Firebase config values in `firebase.config.json` are safe to expose in the browser for client SDK usage.
+
+
+## 🚀 Deployment Instructions
+
+1. Install Firebase CLI:
+    ```bash
+    npm install -g firebase-tools
+    ```
+
+2. Login with Firebase:
+    ```bash
+    firebase login
+    ```
+
+3. Build and deploy:
+    ```bash
+    npm run deploy
+	  ```
+
+
+## 📚 Learn More
 
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
