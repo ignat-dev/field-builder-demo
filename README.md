@@ -25,7 +25,6 @@ This is a dynamic form builder UI, with Firebase Realtime Database integration, 
 │   ├── styles/              # Global styles and themes
 │   └── types/               # TypeScript type definitions
 ├── eslint.config.js         # ESLint configuration
-├── firebase.config.json     # Firebase project details
 ├── firebase.json            # Firebase hosting configuration
 ├── next.config.ts           # Next.js configuration
 ├── package.json             # Project metadata and scripts
@@ -47,8 +46,7 @@ This is a dynamic form builder UI, with Firebase Realtime Database integration, 
 
 ## 💻 Local Development
 
-Start the following command to start the dev server and open 
-[http://localhost:3000](http://localhost:3000) to view the app.
+Start the following command to start the dev server and open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ```bash
 npm run dev
@@ -69,9 +67,14 @@ npm run dev
 
 ## ⚙️ Environment Variables
 
-Copy `.env.template` to `.env.local` (for dev) or `.env.production` (for prod) and set the `NEXT_PUBLIC_API_URL` variable to `/api` for local development, or to a Firebase Realtime Database URL for production.
+Copy `.env.template` to `.env.local` (for dev) or `.env.production` (for prod) and set the `NEXT_PUBLIC_API_URL` variable to `/api` for local development, or to a Firebase Realtime Database URL for production. Also, configure the following Firebase-related environment variables, used to initialize the Firebase app:
 
-**Note:** All Firebase config values in `firebase.config.json` are safe to expose in the browser for client SDK usage.
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_DATABASE_URL=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+```
 
 
 ## 🚀 Deployment Instructions

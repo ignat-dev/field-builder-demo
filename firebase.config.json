@@ -1,9 +1,0 @@
-{
-  "apiKey": "AIzaSyBwrhle3fngf1CcQ6jhNOQCN3ESRbN575U",
-  "appId": "1:1032447351867:web:70a034e4ebd1518243901e",
-  "authDomain": "field-builder-demo.firebaseapp.com",
-  "databaseURL": "https://field-builder-demo-default-rtdb.europe-west1.firebasedatabase.app",
-  "messagingSenderId": "1032447351867",
-  "projectId": "field-builder-demo",
-  "storageBucket": "field-builder-demo.firebasestorage.app"
-}
