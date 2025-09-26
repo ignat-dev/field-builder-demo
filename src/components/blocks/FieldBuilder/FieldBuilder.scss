@@ -17,116 +17,69 @@
     z-index: 1000;
   }
 
-  > .card {
-    > .card-notification {
-      align-items: center;
-      background-color: var(--notification-bg-color);
-      border-bottom: var(--theme-card-border-width) solid var(--notification-border-color);
-      color: var(--notification-color);
-      display: grid;
-      grid-template-columns: min-content 1fr;
-      column-gap: var(--theme-spacing-x);
-      row-gap: calc(0.5 * var(--theme-spacing-y));
-      padding: var(--theme-card-spacing-y) var(--theme-card-spacing-x);
-      position: relative;
+  &__content {
+    align-items: center;
+    column-gap: var(--theme-card-spacing-x);
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    row-gap: calc(2 * var(--theme-card-spacing-y));
+    width: max-content;
 
-      > * {
-        grid-column: 2;
-        margin: 0;
+    > label {
+      font-weight: 500;
+      white-space: nowrap;
+
+      &:has(+ .form__field--vertical) {
+        align-self: start;
+      }
+    }
+
+    > .form__field {
+      display: flex;
+      gap: var(--theme-card-spacing-x);
+
+      &--vertical {
+        flex-direction: column;
+        row-gap: calc(0.5 * var(--theme-card-spacing-y));
       }
 
-      &::before {
-        background-color: var(--notification-color);
-        content: "";
-        display: inline-block;
-        flex-shrink: 0;
-        grid-column: 1;
-        height: 2rem;
-        mask: var(--notification-icon) no-repeat center/contain;
-        width: 2rem;
-      }
+      > .form__field-actions {
+        align-items: center;
+        display: flex;
+        gap: calc(0.25 * var(--theme-card-spacing-x));
+        width: 100%;
 
-      @each $type, $value in (
-        "danger": var(--bs-danger),
-        "info": var(--bs-info),
-        "success": var(--bs-success),
-        "warning": var(--bs-warning),
-      ) {
-        &.type-#{$type} {
-          --notification-bg-color: color-mix(in srgb, #{$value}, #FFF 80%);
-          --notification-border-color: color-mix(in srgb, #{$value}, #FFF 60%);
-          --notification-color: color-mix(in srgb, #{$value}, #000 60%);
-          --notification-icon: url("../../../assets/icons/notifications/#{$type}.svg");
+        > * {
+          flex: 1;
         }
       }
     }
 
-    > .card-body {
-      > .ui-form > .form__content {
-        align-items: center;
-        column-gap: var(--theme-card-spacing-x);
-        display: grid;
-        grid-template-columns: max-content 1fr;
-        row-gap: calc(2 * var(--theme-card-spacing-y));
-        width: max-content;
+    > .form__actions {
+      align-items: center;
+      display: flex;
+      gap: 0.75rem;
+      grid-column: 2;
+      margin-bottom: calc(4 * var(--theme-card-spacing-y));
+      margin-top: calc(2 * var(--theme-card-spacing-y));
+    }
 
-        > label {
-          font-weight: 500;
-          white-space: nowrap;
+    @media screen and (max-width: 520px) {
+      grid-template-columns: 1fr;
+      row-gap: calc(0.5 * var(--theme-card-spacing-y));
 
-          &:has(+ .form__field--vertical) {
-            align-self: start;
-          }
-        }
-
-        > .form__field {
-          display: flex;
-          gap: var(--theme-card-spacing-x);
-
-          &--vertical {
-            flex-direction: column;
-            row-gap: calc(0.5 * var(--theme-card-spacing-y));
-          }
-
-          > .form__field-actions {
-            align-items: center;
-            display: flex;
-            gap: calc(0.25 * var(--theme-card-spacing-x));
-            width: 100%;
-
-            > * {
-              flex: 1;
-            }
-          }
-        }
-
-        > .form__actions {
-          align-items: center;
-          display: flex;
-          gap: 0.75rem;
-          grid-column: 2;
-          margin-bottom: calc(4 * var(--theme-card-spacing-y));
-          margin-top: calc(2 * var(--theme-card-spacing-y));
-        }
-
-        @media screen and (max-width: 520px) {
-          grid-template-columns: 1fr;
-          row-gap: calc(0.5 * var(--theme-card-spacing-y));
-
-          > .form__field {
-            margin-bottom: var(--theme-card-spacing-y);
-            width: 100%;
-          }
-
-          > .form__actions {
-            grid-column: 1;
-          }
-        }
-
-        @media screen and (max-width: 520px) {
-          width: 100%;
-        }
+      > .form__field {
+        margin-bottom: var(--theme-card-spacing-y);
+        width: 100%;
       }
+
+      > .form__actions {
+        grid-column: 1;
+      }
+    }
+
+    @media screen and (max-width: 520px) {
+      width: 100%;
     }
   }
 }

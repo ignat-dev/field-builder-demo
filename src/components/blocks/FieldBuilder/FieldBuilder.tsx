@@ -1,7 +1,7 @@
 "use client"
 
 import { MAX_CHOICES_COUNT } from "@/common/constants"
-import { Button, Form } from "@/components/ui"
+import { Button, Card, Form } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
@@ -25,7 +25,8 @@ export default function FieldBuilder() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [selectedChoice, setSelectedChoice] = useState<string>("")
-  const errorFields = useMemo(() => new Set(errors.map(e => e.field)), [errors])
+  const errorFields = useMemo(() => new Set(errors.map(x => x.field)), [errors])
+  const errorMessages = useMemo(() => errors.map(x => x.message), [errors])
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
   const getOrderedList = useCallback((list: Array<string>, listOrder: string): Array<string> => {
@@ -52,117 +53,106 @@ export default function FieldBuilder() {
           <span>Loading, please wait...</span>
         </div>
       )}
-      <div className="card form-wrapper">
-        <div className="card-header">
-          Field Builder
-        </div>
-        {errors.length > 0 && (
-          <div className="card-notification type-danger">
-            <p>Please correct the following errors and try again:</p>
-            <ul>{errors.map((error, index) => <li key={index}>{error.message}</li>)}</ul>
+      <Card className="form-wrapper" errors={errorMessages} title="Field Builder">
+        <Form contentClassName="field-builder__content" disabled={isSaving} onSubmit={handleSubmit}>
+          <label htmlFor="inputLabel">Label</label>
+          <div className="form__field">
+            <input
+              className={`form-control ${errorFields.has("label") ? "is-invalid" : ""}`}
+              id="inputLabel"
+              name="label"
+              value={label}
+              onChange={onChangeLabel}
+            />
           </div>
-        )}
-        <div className="card-body">
-          <Form contentClassName="form__content" disabled={isSaving} onSubmit={handleSubmit}>
-            <label htmlFor="inputLabel">Label</label>
-            <div className="form__field">
+
+          <label>Type</label>
+          <div className="form__field">
+            <span>Multi-select</span>
+            <div className="form-check">
               <input
-                className={`form-control ${errorFields.has("label") ? "is-invalid" : ""}`}
-                id="inputLabel"
-                name="label"
-                value={label}
-                onChange={onChangeLabel}
+                className="form-check-input"
+                checked={required}
+                id="inputType"
+                name="required"
+                type="checkbox"
+                onChange={onChangeRequired}
+              />
+              <label className="form-check-label" htmlFor="inputType">
+                A Value is required
+              </label>
+            </div>
+          </div>
+
+          <label htmlFor="inputDefaultValue">Default Value</label>
+          <div className="form__field">
+            <input
+              className={`form-control ${errorFields.has("default") ? "is-invalid" : ""}`}
+              id="inputDefaultValue"
+              name="default"
+              value={defaultValue}
+              onChange={onChangeDefaultValue}
+            />
+          </div>
+
+          <label htmlFor="selectChoices">Choices</label>
+          <div className="form__field form__field--vertical">
+            <select
+              className={`form-select ${errorFields.has("choices") ? "is-invalid" : ""}`}
+              id="selectChoices"
+              name="choices"
+              size={6}
+              value={selectedChoice}
+              onInput={onChangeSelectedChoice}
+            >
+              {choices.length === 0 ? (
+                <option disabled={true}>&nbsp;</option>
+              ) : (
+                choices.map((x) => (
+                  <option key={x} value={x}>{x}</option>
+                ))
+              )}
+            </select>
+            <div className="form__field-actions">
+              <Button
+                appearance="outline"
+                disabled={maxChoicesLimitReached}
+                size="small"
+                text="Add"
+                tooltip={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}
+                variant="light"
+                onClick={onAddChoice}
+              />
+              <Button
+                appearance="outline"
+                disabled={!selectedChoice}
+                size="small"
+                text="Remove"
+                tooltip={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}
+                variant="light"
+                onClick={onRemoveChoice}
               />
             </div>
+          </div>
 
-            <label>Type</label>
-            <div className="form__field">
-              <span>Multi-select</span>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  checked={required}
-                  id="inputType"
-                  name="required"
-                  type="checkbox"
-                  onChange={onChangeRequired}
-                />
-                <label className="form-check-label" htmlFor="inputType">
-                  A Value is required
-                </label>
-              </div>
-            </div>
+          <label htmlFor="selectOrder">Order</label>
+          <div className="form__field">
+            <select className="form-select" id="selectOrder" value={order} onChange={onChangeOrder}>
+              {orderOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <label htmlFor="inputDefaultValue">Default Value</label>
-            <div className="form__field">
-              <input
-                className={`form-control ${errorFields.has("default") ? "is-invalid" : ""}`}
-                id="inputDefaultValue"
-                name="default"
-                value={defaultValue}
-                onChange={onChangeDefaultValue}
-              />
-            </div>
-
-            <label htmlFor="selectChoices">Choices</label>
-            <div className="form__field form__field--vertical">
-              <select
-                className={`form-select ${errorFields.has("choices") ? "is-invalid" : ""}`}
-                id="selectChoices"
-                name="choices"
-                size={6}
-                value={selectedChoice}
-                onInput={onChangeSelectedChoice}
-              >
-                {choices.length === 0 ? (
-                  <option disabled={true}>&nbsp;</option>
-                ) : (
-                  choices.map((x) => (
-                    <option key={x} value={x}>{x}</option>
-                  ))
-                )}
-              </select>
-              <div className="form__field-actions">
-                <Button
-                  appearance="outline"
-                  disabled={maxChoicesLimitReached}
-                  size="small"
-                  text="Add"
-                  tooltip={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}
-                  variant="light"
-                  onClick={onAddChoice}
-                />
-                <Button
-                  appearance="outline"
-                  disabled={!selectedChoice}
-                  size="small"
-                  text="Remove"
-                  tooltip={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}
-                  variant="light"
-                  onClick={onRemoveChoice}
-                />
-              </div>
-            </div>
-
-            <label htmlFor="selectOrder">Order</label>
-            <div className="form__field">
-              <select className="form-select" id="selectOrder" value={order} onChange={onChangeOrder}>
-                {orderOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form__actions">
-              <Button loading={isSaving} text={isSaving ? "Saving..." : "Save changes"} type="submit" variant="success" />
-              {" Or "}
-              <Button appearance="link" disabled={isSaving} text="Cancel" variant="danger" onClick={handleClear} />
-            </div>
-          </Form>
-        </div>
-      </div>
+          <div className="form__actions">
+            <Button loading={isSaving} text={isSaving ? "Saving..." : "Save changes"} type="submit" variant="success" />
+            {" Or "}
+            <Button appearance="link" disabled={isSaving} text="Cancel" variant="danger" onClick={handleClear} />
+          </div>
+        </Form>
+      </Card>
     </div>
   )
 
