@@ -4,6 +4,7 @@ import "./Button.scss"
 
 interface Props {
   appearance?: "link" | "outline"
+  className?: string
   disabled?: boolean
   loading?: boolean
   size?: "small" | "standard" | "large"
@@ -17,6 +18,7 @@ interface Props {
 
 export default function Button({
   appearance,
+  className,
   disabled,
   loading,
   size = "standard",
@@ -26,8 +28,8 @@ export default function Button({
   variant,
   onClick,
 }: Props) {
-  const className = useMemo(() => {
-    const result = ["btn"]
+  const buttonClassName = useMemo(() => {
+    const result = ["btn", className].filter(Boolean)
 
     if (variant) {
       result.push(appearance === "outline" ? `btn-outline-${variant}` : `btn-${variant}`)
@@ -42,11 +44,11 @@ export default function Button({
     }
 
     return result.join(" ")
-  }, [appearance, size, variant])
+  }, [appearance, className, size, variant])
 
   return (
     <span className="ui-button" title={tooltip}>
-      <button className={className} disabled={disabled || loading} type={type} onClick={onClick}>
+      <button className={buttonClassName} disabled={disabled || loading} type={type} onClick={onClick}>
         {loading && (
           <span className="spinner-border spinner-border-sm" />
         )}

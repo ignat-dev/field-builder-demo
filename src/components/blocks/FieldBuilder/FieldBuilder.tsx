@@ -1,7 +1,7 @@
 "use client"
 
 import { MAX_CHOICES_COUNT } from "@/common/constants"
-import { Button } from "@/components/ui"
+import { Button, Form } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
@@ -63,12 +63,11 @@ export default function FieldBuilder() {
           </div>
         )}
         <div className="card-body">
-          <form onSubmit={handleSubmit}>
-          <fieldset disabled={isSaving}>
+          <Form contentClassName="form__content" disabled={isSaving} onSubmit={handleSubmit}>
             <label htmlFor="inputLabel">Label</label>
             <div className="form__field">
               <input
-                className={`form-control${errorFields.has("label") ? " is-invalid" : ""}`}
+                className={`form-control ${errorFields.has("label") ? "is-invalid" : ""}`}
                 id="inputLabel"
                 name="label"
                 value={label}
@@ -97,7 +96,7 @@ export default function FieldBuilder() {
             <label htmlFor="inputDefaultValue">Default Value</label>
             <div className="form__field">
               <input
-                className={`form-control${errorFields.has("default") ? " is-invalid" : ""}`}
+                className={`form-control ${errorFields.has("default") ? "is-invalid" : ""}`}
                 id="inputDefaultValue"
                 name="default"
                 value={defaultValue}
@@ -108,7 +107,7 @@ export default function FieldBuilder() {
             <label htmlFor="selectChoices">Choices</label>
             <div className="form__field form__field--vertical">
               <select
-                className={`form-select${errorFields.has("choices") ? " is-invalid" : ""}`}
+                className={`form-select ${errorFields.has("choices") ? "is-invalid" : ""}`}
                 id="selectChoices"
                 name="choices"
                 size={6}
@@ -161,8 +160,7 @@ export default function FieldBuilder() {
               {" Or "}
               <Button appearance="link" disabled={isSaving} text="Cancel" variant="danger" onClick={handleClear} />
             </div>
-          </fieldset>
-          </form>
+          </Form>
         </div>
       </div>
     </div>

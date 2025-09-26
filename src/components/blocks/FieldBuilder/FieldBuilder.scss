@@ -62,7 +62,7 @@
     }
 
     > .card-body {
-      > form > fieldset {
+      > .ui-form > .form__content {
         align-items: center;
         column-gap: var(--theme-card-spacing-x);
         display: grid;
