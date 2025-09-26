@@ -4,7 +4,7 @@ import "../styles/themes/bootstrap.scss"
 import "../styles/main.scss"
 
 export const metadata: Metadata = {
-  title: "Quickbase Field Builder",
+  title: "Field Builder Demo",
 }
 
 export default function RootLayout({
