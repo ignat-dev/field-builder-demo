@@ -1,16 +1,18 @@
+import type { ReactNode } from "react"
+
 import "./Card.scss"
 
-interface Props {
+export interface Props {
+  children?: ReactNode
   className?: string
   contentClassName?: string
   errors?: Array<string>
-  children?: React.ReactNode
   title?: string
 }
 
-export default function Card({ children, className, contentClassName, errors, title }: Props) {
+export function Card({ children, className, contentClassName, errors, title }: Props) {
   return (
-    <div className={`ui-card card ${className}`}>
+    <div className={`ui-card card ${className ?? ""}`.trim()}>
       {title && (
         <div className="card-header">
           {title}

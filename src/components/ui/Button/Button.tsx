@@ -1,8 +1,9 @@
+import type { MouseEvent } from "react"
 import { useMemo } from "react"
 
 import "./Button.scss"
 
-interface Props {
+export interface Props {
   appearance?: "link" | "outline"
   className?: string
   disabled?: boolean
@@ -13,10 +14,10 @@ interface Props {
   type?: "button" | "submit" | "reset"
   variant?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark"
 
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void
 }
 
-export default function Button({
+export function Button({
   appearance,
   className,
   disabled,
@@ -35,11 +36,11 @@ export default function Button({
       result.push(appearance === "outline" ? `btn-outline-${variant}` : `btn-${variant}`)
     }
 
-    if (appearance !== "outline") {
+    if (appearance && appearance !== "outline") {
       result.push(`btn-${appearance}`)
     }
 
-    if (size !== "standard") {
+    if (size && size !== "standard") {
       result.push(`btn-${size === "small" ? "sm" : "lg"}`)
     }
 

@@ -1,17 +1,19 @@
+import type { FormEvent, ReactNode } from "react"
+
 import "./Form.scss"
 
-interface Props {
+export interface Props {
+  children?: ReactNode
   className?: string
   contentClassName?: string
-  children?: React.ReactNode
   disabled?: boolean
 
-  onSubmit?: (e: React.FormEvent) => void
+  onSubmit?: (e: FormEvent) => void
 }
 
-export default function Form({ className, contentClassName, children, disabled, onSubmit }: Props) {
+export function Form({ children, className, contentClassName, disabled, onSubmit }: Props) {
   return (
-    <form className={`ui-form ${className}`} onSubmit={onSubmit}>
+    <form className={`ui-form ${className ?? ""}`.trim()} onSubmit={onSubmit}>
       <fieldset className={contentClassName} disabled={disabled}>
         {children}
       </fieldset>
