@@ -60,8 +60,10 @@ npm run dev
 | `npm run dev`          | Start development server            |
 | `npm run build`        | Build for production                |
 | `npm run start`        | Start production server             |
+| `npm run test`         | Run unit tests                      |
+| `npm run test:coverage`| Generate test coverage report       |
 | `npm run lint`         | Run ESLint checks                   |
-| `npm run lint-fix`     | Fix ESLint issues                   |
+| `npm run lint:fix`     | Fix ESLint issues                   |
 | `npm run deploy`       | Deploy to Firebase Hosting          |
 
 
@@ -92,7 +94,7 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=
 3. Build and deploy:
     ```bash
     npm run deploy
-	  ```
+    ```
 
 
 ## 📚 Learn More

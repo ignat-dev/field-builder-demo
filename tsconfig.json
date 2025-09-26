@@ -26,16 +26,20 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": [
+      "vitest/globals"
+    ]
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
+    ".next/types/**/*.ts",
+    "dist/types/**/*.ts",
+    "src/test/setup.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "next-env.d.ts",
-    "dist/types/**/*.ts"
+    "next-env.d.ts"
   ]
 }
