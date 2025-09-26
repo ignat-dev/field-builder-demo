@@ -112,6 +112,24 @@
           margin-bottom: calc(4 * var(--theme-card-spacing-y));
           margin-top: calc(2 * var(--theme-card-spacing-y));
         }
+
+        @media screen and (max-width: 520px) {
+          grid-template-columns: 1fr;
+          row-gap: calc(0.5 * var(--theme-card-spacing-y));
+
+          > .form__field {
+            margin-bottom: var(--theme-card-spacing-y);
+            width: 100%;
+          }
+
+          > .form__actions {
+            grid-column: 1;
+          }
+        }
+
+        @media screen and (max-width: 520px) {
+          width: 100%;
+        }
       }
     }
   }
