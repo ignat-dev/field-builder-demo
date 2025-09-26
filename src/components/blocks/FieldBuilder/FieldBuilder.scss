@@ -92,14 +92,10 @@
             align-items: center;
             display: flex;
             gap: calc(0.25 * var(--theme-card-spacing-x));
+            width: 100%;
 
             > * {
-              display: inline-block;
               flex: 1;
-
-              > button {
-                width: 100%;
-              }
             }
           }
         }

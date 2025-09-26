@@ -1,6 +1,7 @@
 "use client"
 
 import { MAX_CHOICES_COUNT } from "@/common/constants"
+import { Button } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
@@ -123,26 +124,24 @@ export default function FieldBuilder() {
                 )}
               </select>
               <div className="form__field-actions">
-                <span title={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}>
-                  <button
-                    className="btn btn-outline-light btn-sm"
-                    disabled={maxChoicesLimitReached}
-                    type="button"
-                    onClick={onAddChoice}
-                  >
-                    Add
-                  </button>
-                </span>
-                <span title={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}>
-                  <button
-                    className="btn btn-outline-light btn-sm"
-                    disabled={!selectedChoice}
-                    type="button"
-                    onClick={onRemoveChoice}
-                  >
-                    Remove
-                  </button>
-                </span>
+                <Button
+                  appearance="outline"
+                  disabled={maxChoicesLimitReached}
+                  size="small"
+                  text="Add"
+                  tooltip={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}
+                  variant="light"
+                  onClick={onAddChoice}
+                />
+                <Button
+                  appearance="outline"
+                  disabled={!selectedChoice}
+                  size="small"
+                  text="Remove"
+                  tooltip={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}
+                  variant="light"
+                  onClick={onRemoveChoice}
+                />
               </div>
             </div>
 
@@ -158,14 +157,9 @@ export default function FieldBuilder() {
             </div>
 
             <div className="form__actions">
-              <button className="btn btn-success" disabled={isSaving} type="submit">
-                <span className={isSaving ? "spinner-border spinner-border-sm" : ""} />
-                <span>{isSaving ? "Saving..." : "Save changes"}</span>
-              </button>
+              <Button loading={isSaving} text={isSaving ? "Saving..." : "Save changes"} type="submit" variant="success" />
               {" Or "}
-              <button className="btn btn-danger btn-link" disabled={isSaving} type="button" onClick={handleClear}>
-                Cancel
-              </button>
+              <Button appearance="link" disabled={isSaving} text="Cancel" variant="danger" onClick={handleClear} />
             </div>
           </fieldset>
           </form>
