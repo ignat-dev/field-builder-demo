@@ -1,49 +1,17 @@
 import { FIELD_BUILDER_STATE_KEY } from "@/common/constants"
 import { getField, saveField } from "@/lib/api"
 import { storage } from "@/lib/storage"
+import { apiMockData } from "@/test/mocks"
 import type { FieldData } from "@/types"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import type { Mock } from "vitest"
 import FieldBuilder from "./FieldBuilder"
 
-vi.mock("@/lib/api", () => ({
-  getField: vi.fn().mockResolvedValue({
-    id: "123",
-    label: "Sample Field",
-    type: "multi-select",
-    required: true,
-    default: "Def X",
-    choices: ["Option A", "Option B", "Option C"],
-    displayAlpha: true,
-    timestamp: Date.now() - 1000000,
-  }),
+const { createApiMock, createStorageMock } = await vi.hoisted(() => import("@/test/mocks"))
 
-  saveField: vi.fn().mockResolvedValue({
-    success: true,
-  }),
-}))
+vi.mock("@/lib/api", () => createApiMock())
 
-vi.mock("@/lib/storage", () => {
-  const storage: Record<string, string> = {}
-
-  return {
-    storage: {
-      get: vi.fn().mockImplementation((key: string) => {
-        const item = storage[key] ?? ""
-
-        return item ? JSON.parse(item) : null
-      }),
-
-      set: vi.fn().mockImplementation((key: string, value: unknown) => {
-        storage[key] = JSON.stringify(value)
-      }),
-
-      remove: vi.fn().mockImplementation((key: string) => {
-        delete storage[key]
-      }),
-    },
-  }
-})
+vi.mock("@/lib/storage", () => createStorageMock())
 
 const fieldId = "123"
 const testData = {
@@ -131,11 +99,11 @@ describe(FieldBuilder, () => {
 
     // Check if the form was populated correctly.
     expect(form).toHaveFormValues({
-      label: "Sample Field",
-      required: true,
-      default: "Def X",
-      choices: "Option A",
-      order: "alphabetical",
+      label: apiMockData.label,
+      required: apiMockData.required,
+      default: apiMockData.default,
+      choices: apiMockData.choices[0],
+      order: apiMockData.displayAlpha ? "alphabetical" : "original",
     })
 
     // Check if the choices were populated correctly.
