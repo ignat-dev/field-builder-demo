@@ -13,9 +13,21 @@ export interface Props {
   title?: string
 
   onClose?: () => void
+  onKeyDown?: (e: KeyboardEvent) => boolean | void
 }
 
-export function Modal({ allowClose = true, children, className, footer, id, maxWidth, open, title, onClose }: Props) {
+export function Modal({
+  allowClose = true,
+  children,
+  className,
+  footer,
+  id,
+  maxWidth,
+  open,
+  title,
+  onClose,
+  onKeyDown
+}: Props) {
   const wrapperClassName = useMemo(() => {
     return ["ui-modal", className ?? "", "modal", "fade", open ? "show" : ""].filter(Boolean).join(" ").trim()
   }, [className, open])
@@ -24,13 +36,17 @@ export function Modal({ allowClose = true, children, className, footer, id, maxW
   }, [maxWidth])
 
   useEffect(() => {
-    if (!allowClose || !open || !onClose) {
+    if (!open || !(onClose || onKeyDown)) {
       return
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose()
+      if (onKeyDown?.(e) === false) {
+        return
+      }
+
+      if (allowClose && e.key === "Escape") {
+        onClose?.()
       }
     }
 
@@ -39,7 +55,7 @@ export function Modal({ allowClose = true, children, className, footer, id, maxW
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [allowClose, open, onClose])
+  }, [allowClose, open, onClose, onKeyDown])
 
   return (
     <div className={wrapperClassName} id={id} tabIndex={-1} style={wrapperStyle}>

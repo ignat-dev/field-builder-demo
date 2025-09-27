@@ -80,7 +80,7 @@ describe(Modal, () => {
   it("calls onClose when Escape key is pressed", () => {
     const onClose = vi.fn()
 
-    renderComponent({ open: true, onClose })
+    renderComponent({ onClose })
 
     fireEvent.keyDown(window, { key: "Escape" })
 
@@ -90,10 +90,34 @@ describe(Modal, () => {
   it("does not call onClose on Escape keypress when 'allowClose' is false", () => {
     const onClose = vi.fn()
 
-    renderComponent({ open: true, onClose, allowClose: false })
+    renderComponent({ onClose, allowClose: false })
 
     fireEvent.keyDown(window, { key: "Escape" })
 
+    expect(onClose).not.toHaveBeenCalled()
+  })
+
+  it("calls onKeyDown handler when provided", () => {
+    const onClose = vi.fn()
+    const onKeyDown = vi.fn()
+
+    renderComponent({ onClose, onKeyDown })
+
+    fireEvent.keyDown(window, { key: "Escape" })
+
+    expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: "Escape" }))
+    expect(onClose).toHaveBeenCalled()
+  })
+
+  it("blocks default behavior when onKeyDown returns false", () => {
+    const onClose = vi.fn()
+    const onKeyDown = vi.fn().mockImplementation(() => false)
+
+    renderComponent({ onClose, onKeyDown })
+
+    fireEvent.keyDown(window, { key: "Escape" })
+
+    expect(onKeyDown).toHaveBeenCalledWith(expect.objectContaining({ key: "Escape" }))
     expect(onClose).not.toHaveBeenCalled()
   })
 })

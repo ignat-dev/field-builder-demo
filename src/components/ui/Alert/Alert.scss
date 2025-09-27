@@ -1,0 +1,12 @@
+.ui-alert {
+  > .modal-dialog > .modal-content {
+    > .modal-footer {
+      border-top: 0;
+      padding-top: 0;
+
+      > * {
+        min-width: 100px;
+      }
+    }
+  }
+}
