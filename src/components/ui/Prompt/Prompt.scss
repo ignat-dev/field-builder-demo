@@ -1,0 +1,68 @@
+.ui-prompt {
+  > .modal-dialog > .modal-content {
+    > .modal-footer {
+      border-top: 0;
+      padding-top: 0;
+
+      > * {
+        min-width: 100px;
+      }
+    }
+  }
+}
+
+.ui-prompt__input-container {
+  border: var(--theme-border-width) solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  font-size: 0;
+  position: relative;
+  width: 100%;
+
+  &:focus-within {
+    border-color: var(--theme-active-border-color);
+  }
+
+  > .ui-prompt__input-formatter,
+  > .ui-prompt__input-control {
+    border: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: var(--theme-font-size);
+    line-height: var(--theme-line-height);
+    min-height: calc(var(--theme-font-size) * var(--theme-line-height) + 2 * var(--theme-input-spacing-y));
+    overflow-y: auto;
+    padding: var(--theme-input-spacing-y) var(--theme-input-spacing-x);
+    transition: height 0.2s;
+    white-space: pre-wrap;
+    width: 100%;
+    word-break: break-word;
+  }
+
+  > .ui-prompt__input-formatter {
+    background-color: transparent;
+    border-color: transparent;
+    bottom: 0;
+    color: inherit;
+    left: 0;
+    overflow-x: hidden;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0;
+
+    > .text-overflow {
+      color: red;
+    }
+  }
+
+  > .ui-prompt__input-control {
+    background: transparent;
+    caret-color: var(--foreground-color);
+    color: transparent;
+    outline: none;
+    position: relative;
+    resize: none;
+    z-index: 1;
+  }
+}

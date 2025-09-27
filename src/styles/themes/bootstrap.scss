@@ -3,12 +3,20 @@
 :root {
   --background-color: var(--bs-white);
   --foreground-color: var(--bs-black);
+  --theme-active-border-color: #86b7fe;
+  --theme-border-color: var(--bs-border-color);
+  --theme-border-radius: var(--bs-border-radius);
+  --theme-border-width: 1.5px;
   --theme-color-danger: var(--bs-danger);
   --theme-color-info: var(--bs-info);
   --theme-color-success: var(--bs-success);
   --theme-color-warning: var(--bs-warning);
-  --theme-spacing-x: 1rem;
-  --theme-spacing-y: 1rem;
+  --theme-font-size: var(--bs-body-font-size);
+  --theme-input-spacing-x: calc(0.75 * var(--theme-spacing-x, 1rem));
+  --theme-input-spacing-y: calc(0.375 * var(--theme-spacing-y, 1rem));
+  --theme-line-height: var(--bs-body-line-height, 1.5);
+  --theme-spacing-x: var(--bs-body-spacing-x, 1rem);
+  --theme-spacing-y: var(--bs-body-spacing-y, 1rem);
 }
 
 .btn {
