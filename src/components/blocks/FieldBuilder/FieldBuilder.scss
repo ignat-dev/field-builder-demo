@@ -22,6 +22,7 @@
     column-gap: var(--theme-card-spacing-x);
     display: grid;
     grid-template-columns: max-content 1fr;
+    max-width: 100%;
     row-gap: calc(2 * var(--theme-card-spacing-y));
     width: max-content;
 

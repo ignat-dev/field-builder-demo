@@ -98,7 +98,7 @@
   --bs-border-color: #CCC;
   --bs-border-width: 1.5px;
   --theme-card-border-width: var(--bs-border-width);
-  --theme-card-spacing-x: calc(2 * var(--theme-spacing-x));
+  --theme-card-spacing-x: calc(2.5 * var(--theme-spacing-x));
   --theme-card-spacing-y: calc(0.75 * var(--theme-spacing-y));
 
   > .card-header {
@@ -189,7 +189,9 @@
   }
 
   > option {
+    overflow: hidden;
     padding: 0.25rem 1.25rem;
+    text-overflow: ellipsis;
 
     &:checked {
       background-color: #F5F5F5;

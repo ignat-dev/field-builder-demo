@@ -38,9 +38,13 @@ export function Prompt({
   ), [maxLines, textareaRef])
 
   useEffect(() => {
-    if (open && textareaRef.current) {
-      textareaRef.current?.focus()
+    const textarea = textareaRef.current
+
+    if (open && textarea) {
+      textarea.focus()
     }
+
+    return () => textarea?.blur()
   }, [open])
 
   return (
@@ -51,7 +55,7 @@ export function Prompt({
       maxWidth={maxWidth}
       open={open}
       title={title}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <div className="ui-prompt__input-container">
         <div className="ui-prompt__input-formatter" ref={formatterRef}>
@@ -118,6 +122,7 @@ export function Prompt({
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>): void {
     if (e.key === "Enter") {
       e.preventDefault()
+      e.stopPropagation()
       onSubmit()
     }
   }
@@ -130,6 +135,19 @@ export function Prompt({
 
   function onSubmit(): void {
     onClose?.(value)
+    resetState()
+  }
+
+  function onCloseModal(): void {
+    onClose?.()
+    resetState()
+  }
+
+  function resetState(): void {
     setValue("")
+
+    if (textareaRef.current && formatterRef.current) {
+      textareaRef.current.style.height = formatterRef.current.style.height = "auto"
+    }
   }
 }

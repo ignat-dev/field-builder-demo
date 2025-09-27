@@ -216,11 +216,10 @@ function populateFormFields(data: Partial<FieldData>) {
   }
 
   if (data.choices !== undefined) {
-    const prompt = vi.spyOn(window, "prompt")
-
     for (const choice of data.choices) {
-      prompt.mockImplementationOnce(() => choice)
       fireEvent.click(screen.getByText("Add"))
+      fireEvent.input(screen.getByPlaceholderText("Enter choice value"), { target: { value: choice } })
+      fireEvent.click(screen.getByText("OK"))
     }
   }
 

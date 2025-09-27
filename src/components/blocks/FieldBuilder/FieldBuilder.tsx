@@ -1,7 +1,7 @@
 "use client"
 
-import { FIELD_BUILDER_STATE_KEY, MAX_CHOICES_COUNT } from "@/common/constants"
-import { Button, Card, Form } from "@/components/ui"
+import { FIELD_BUILDER_STATE_KEY, MAX_CHOICE_LENGTH, MAX_CHOICES_COUNT } from "@/common/constants"
+import { Alert, Button, Card, Form, Prompt } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
@@ -25,12 +25,15 @@ export default function FieldBuilder() {
   const [order, setOrder] = useState<typeof orderOptions[number]["value"]>("original")
   const [required, setRequired] = useState<boolean>(false)
 
+  const [alertInfo, setAlertInfo] = useState<{ text: string; title: string } | null>(null)
   const [errors, setErrors] = useState<Array<ValidationError>>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isPromptOpen, setIsPromptOpen] = useState<boolean>(false)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [selectedChoice, setSelectedChoice] = useState<string>("")
   const errorFields = useMemo(() => new Set(errors.map(x => x.field)), [errors])
   const errorMessages = useMemo(() => errors.map(x => x.message), [errors])
+  const isAlertOpen = useMemo(() => alertInfo !== null, [alertInfo])
   const maxChoicesLimitReached = useMemo(() => choices.length >= MAX_CHOICES_COUNT, [choices.length])
 
   const getOrderedList = useCallback((list: Array<string>, listOrder: string): Array<string> => {
@@ -169,6 +172,14 @@ export default function FieldBuilder() {
           </div>
         </Form>
       </Card>
+      <Alert {...alertInfo} open={isAlertOpen} onClose={onCloseAlert} />
+      <Prompt
+        open={isPromptOpen}
+        title="Add a choice"
+        maxLength={MAX_CHOICE_LENGTH}
+        placeholder="Enter choice value"
+        onClose={onClosePrompt}
+      />
     </div>
   )
 
@@ -252,16 +263,7 @@ export default function FieldBuilder() {
   }
 
   function onAddChoice() {
-    const choice = prompt("Enter choice name:")
-
-    if (choice) {
-      if (!choices.includes(choice)) {
-        updateChoicesList([...choices, choice])
-        setSelectedChoice(choice)
-      } else {
-        alert(`A choice "${choice}" already exists, please enter a different name.`)
-      }
-    }
+    setIsPromptOpen(true)
   }
 
   function onRemoveChoice() {
@@ -274,6 +276,29 @@ export default function FieldBuilder() {
       setSelectedChoice(updated[nextIndex] || "")
       saveFormState({ choices: updated })
     }
+  }
+
+  function onClosePrompt(text?: string) {
+    setIsPromptOpen(false)
+
+    if (text) {
+      const lowerText = text.toLocaleLowerCase()
+      const duplicate = choices.find((x) => x.toLocaleLowerCase() === lowerText)
+
+      if (!duplicate) {
+        updateChoicesList([...choices, text])
+        setSelectedChoice(text)
+      } else {
+        setAlertInfo({
+          title: "Choice already exists",
+          text: `A choice "${duplicate}" already exists, please enter a different value.`,
+        })
+      }
+    }
+  }
+
+  function onCloseAlert() {
+    setAlertInfo(null)
   }
 
   function updateChoicesList(list: Array<string>, listOrder?: string): Array<string> {
