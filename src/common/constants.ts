@@ -1,2 +1,3 @@
 export const CHOICE_MAX_LENGTH = 40
+export const FIELD_BUILDER_STATE_KEY = "FIELD_BUILDER_STATE"
 export const MAX_CHOICES_COUNT = 50

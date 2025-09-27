@@ -1,9 +1,12 @@
-import { FieldData } from "@/types"
+import { FIELD_BUILDER_STATE_KEY } from "@/common/constants"
+import { getField, saveField } from "@/lib/api"
+import { storage } from "@/lib/storage"
+import type { FieldData } from "@/types"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-import { getField, saveField } from "../../../lib/api"
+import type { Mock } from "vitest"
 import FieldBuilder from "./FieldBuilder"
 
-vi.mock("../../../lib/api", () => ({
+vi.mock("@/lib/api", () => ({
   getField: vi.fn().mockResolvedValue({
     id: "123",
     label: "Sample Field",
@@ -12,9 +15,44 @@ vi.mock("../../../lib/api", () => ({
     default: "Def X",
     choices: ["Option A", "Option B", "Option C"],
     displayAlpha: true,
+    timestamp: Date.now() - 1000000,
   }),
-  saveField: vi.fn().mockResolvedValue({ success: true }),
+
+  saveField: vi.fn().mockResolvedValue({
+    success: true,
+  }),
 }))
+
+vi.mock("@/lib/storage", () => {
+  const storage: Record<string, string> = {}
+
+  return {
+    storage: {
+      get: vi.fn().mockImplementation((key: string) => {
+        const item = storage[key] ?? ""
+
+        return item ? JSON.parse(item) : null
+      }),
+
+      set: vi.fn().mockImplementation((key: string, value: unknown) => {
+        storage[key] = JSON.stringify(value)
+      }),
+
+      remove: vi.fn().mockImplementation((key: string) => {
+        delete storage[key]
+      }),
+    },
+  }
+})
+
+const fieldId = "123"
+const testData = {
+  label: "Test Data Label",
+  required: false,
+  default: "Choice X",
+  choices: ["Choice X", "Choice Y", "Choice Z"],
+  displayAlpha: false,
+}
 
 describe(FieldBuilder, () => {
   beforeEach(() => {
@@ -112,20 +150,12 @@ describe(FieldBuilder, () => {
   it("submits the form data correctly", async () => {
     await renderComponent()
 
-    const testData = {
-      label: "New Test Label",
-      required: false,
-      default: "Choice X",
-      choices: ["Choice X", "Choice Y", "Choice Z"],
-      displayAlpha: false,
-    }
-
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
     populateFormFields(testData)
     fireEvent.click(screen.getByRole("button", { name: "Save changes" }))
     await waitFor(() => { expect(saveField).toHaveBeenCalled() })
 
-    expect(saveField).toHaveBeenCalledWith({ type: "multi-select", ...testData })
+    expect(saveField).toHaveBeenCalledWith({ type: "multi-select", timestamp: expect.any(Number), ...testData })
   })
 
   it("clears the form data correctly", async () => {
@@ -136,6 +166,59 @@ describe(FieldBuilder, () => {
 
     expect(form).toHaveFormValues({ label: "", required: false, default: "", choices: undefined, order: "original" })
     expect(screen.getByLabelText("Choices").querySelectorAll("option")).toHaveLength(1)
+  })
+
+  it("saves the state to localStorage on change", async () => {
+    await renderComponent()
+
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+    populateFormFields(testData)
+
+    const state = storage.get<FieldData>(`${FIELD_BUILDER_STATE_KEY}:${fieldId}`) ?? {} as FieldData
+
+    expect(state.label).toEqual(testData.label)
+    expect(state.required).toEqual(testData.required)
+    expect(state.default).toEqual(testData.default)
+    expect(state.choices).toEqual(testData.choices)
+    expect(state.displayAlpha).toEqual(testData.displayAlpha)
+  })
+
+  it("loads the state from localStorage on mount", async () => {
+    storage.set(`${FIELD_BUILDER_STATE_KEY}:${fieldId}`, { ...testData, timestamp: Date.now() + 1000000 })
+
+    await renderComponent()
+
+    expect(screen.getByLabelText("Label")).toHaveValue(testData.label)
+    expect(screen.getByLabelText("Default Value")).toHaveValue(testData.default)
+    expect(screen.getByLabelText("Order")).toHaveValue(testData.displayAlpha ? "alphabetical" : "original")
+
+    const checkbox = screen.getByLabelText<HTMLInputElement>("A Value is required")
+    const select = screen.getByLabelText<HTMLSelectElement>("Choices")
+
+    expect(checkbox.attributes.getNamedItem("checked")).toEqual(testData.required || null)
+    expect(Array.from(select.options).map((x) => x.value)).toEqual(testData.choices)
+  })
+
+  it("loads the state from API when newer", async () => {
+    // Mock API to return newer state.
+    (getField as Mock).mockResolvedValueOnce({
+      ...testData,
+      label: "New Field Label",
+      default: "New Default Value",
+      timestamp: Date.now(),
+    })
+
+    // Populate localStorage with older state.
+    storage.set(`${FIELD_BUILDER_STATE_KEY}:${fieldId}`, {
+      ...testData,
+      timestamp: Date.now() - 1000000,
+    })
+
+    await renderComponent()
+
+    // Verify that the form is populated with the newer state.
+    expect(screen.getByLabelText("Label")).toHaveValue("New Field Label")
+    expect(screen.getByLabelText("Default Value")).toHaveValue("New Default Value")
   })
 })
 
@@ -174,7 +257,7 @@ function populateFormFields(data: Partial<FieldData>) {
   }
 
   if (data.displayAlpha !== undefined) {
-    const order = data.displayAlpha ? "alphabetical": "original"
+    const order = data.displayAlpha ? "alphabetical" : "original"
 
     fireEvent.change(screen.getByLabelText("Order"), { target: { value: order } })
   }

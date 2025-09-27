@@ -1,7 +1,7 @@
 import { FieldData } from "@/types"
 
-export async function getField(id: string): Promise<FieldData> {
-  return makeRequest<FieldData>(`/fields/${id}`)
+export async function getField(id: string): Promise<FieldData | null> {
+  return makeRequest<FieldData | null>(`/fields/${id}`)
 }
 
 export async function saveField(fieldData: FieldData): Promise<void> {

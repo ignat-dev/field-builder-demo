@@ -6,4 +6,5 @@ export interface FieldData {
   default?: string
   choices: Array<string>
   displayAlpha?: boolean
+  timestamp?: number
 }

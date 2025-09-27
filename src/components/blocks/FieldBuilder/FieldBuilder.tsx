@@ -1,8 +1,9 @@
 "use client"
 
-import { MAX_CHOICES_COUNT } from "@/common/constants"
+import { FIELD_BUILDER_STATE_KEY, MAX_CHOICES_COUNT } from "@/common/constants"
 import { Button, Card, Form } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
+import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
 import { useCallback, useEffect, useMemo, useState } from "react"
@@ -14,6 +15,9 @@ export default function FieldBuilder() {
     { value: "original", label: "Display choices in original order" },
     { value: "alphabetical", label: "Display choices in Alphabetical" },
   ]
+
+  const fieldId = "123" // Using a hardcoded ID for demo purposes.
+  const storageKey = `${FIELD_BUILDER_STATE_KEY}:${fieldId}`
 
   const [choices, setChoices] = useState<Array<string>>([])
   const [defaultValue, setDefaultValue] = useState<string>("")
@@ -34,16 +38,28 @@ export default function FieldBuilder() {
   }, [])
 
   useEffect(() => {
-    getField("123").then(fieldData => {
-      const order = fieldData.displayAlpha ? "alphabetical" : "original"
+    Promise.all([
+      Promise.resolve(storage.get<FieldData>(storageKey)),
+      getField(fieldId),
+    ])
+      .then((results) => (
+        results.filter((x) => x !== null).sort((x, y) => (y.timestamp ?? 0) - (x.timestamp ?? 0))
+      ))
+      .then(([data]) => {
+        if (data) {
+          const order = data.displayAlpha ? "alphabetical" : "original"
 
-      setLabel(fieldData.label ?? "")
-      setRequired(fieldData.required ?? false)
-      setDefaultValue(fieldData.default ?? "")
-      setChoices(getOrderedList(fieldData.choices ?? [], order))
-      setOrder(order)
-    }).finally(() => setIsLoading(false))
-  }, [getOrderedList])
+          setLabel(data.label ?? "")
+          setRequired(data.required ?? false)
+          setDefaultValue(data.default ?? "")
+          setChoices(getOrderedList(data.choices ?? [], order))
+          setOrder(order)
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [getOrderedList, storageKey])
 
   return (
     <div className="field-builder">
@@ -173,6 +189,7 @@ export default function FieldBuilder() {
       default: defaultValue,
       choices: choicesList,
       displayAlpha: order === "alphabetical",
+      timestamp: Date.now()
     }
 
     const { errors } = validateFieldData(data)
@@ -183,12 +200,10 @@ export default function FieldBuilder() {
       setErrors([])
     }
 
-    console.log("Submitting form data..", data)
 
     try {
       setIsSaving(true)
       await saveField(data)
-      console.log("Field data saved successfully.")
     } catch (ex) {
       console.error("An unexpected error occurred while saving the field data.", ex)
     } finally {
@@ -197,24 +212,27 @@ export default function FieldBuilder() {
   }
 
   function handleClear() {
-    console.log("Clearing form data..")
     setLabel("")
     setRequired(false)
     setDefaultValue("")
     setChoices([])
     setOrder("original")
+    storage.remove(storageKey)
   }
 
   function onChangeLabel(e: React.ChangeEvent<HTMLInputElement>) {
     setLabel(e.target.value)
+    saveFormState({ label: e.target.value })
   }
 
   function onChangeRequired(e: React.ChangeEvent<HTMLInputElement>) {
     setRequired(e.target.checked)
+    saveFormState({ required: e.target.checked })
   }
 
   function onChangeDefaultValue(e: React.ChangeEvent<HTMLInputElement>) {
     setDefaultValue(e.target.value)
+    saveFormState({ default: e.target.value })
   }
 
   function onChangeSelectedChoice(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -226,6 +244,7 @@ export default function FieldBuilder() {
     const nextOrder = e.target.value as typeof orderOptions[number]["value"]
 
     setOrder(nextOrder)
+    saveFormState({ displayAlpha: nextOrder === "alphabetical" })
 
     if (prevOrder === "original" && nextOrder === "alphabetical") {
       updateChoicesList(choices, nextOrder)
@@ -253,16 +272,33 @@ export default function FieldBuilder() {
 
       setChoices(updated)
       setSelectedChoice(updated[nextIndex] || "")
+      saveFormState({ choices: updated })
     }
   }
 
   function updateChoicesList(list: Array<string>, listOrder?: string): Array<string> {
-    setChoices(getOrderedList(list, listOrder ?? order))
+    const result = getOrderedList(list, listOrder ?? order)
 
-    if (selectedChoice && !list.includes(selectedChoice)) {
+    setChoices(result)
+    saveFormState({ choices: result })
+
+    if (selectedChoice && !result.includes(selectedChoice)) {
       setSelectedChoice("")
     }
 
-    return list
+    return result
+  }
+
+  function saveFormState(state: Partial<FieldData>) {
+    storage.set<FieldData>(storageKey, {
+      label,
+      type: "multi-select",
+      required,
+      default: defaultValue,
+      choices,
+      displayAlpha: order === "alphabetical",
+      ...state,
+      timestamp: Date.now(),
+    })
   }
 }
