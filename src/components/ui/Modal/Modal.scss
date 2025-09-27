@@ -1,0 +1,72 @@
+.ui-modal {
+  background-color: color-mix(in srgb, var(--foreground-color), transparent 60%);
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  > .modal-dialog {
+    background-color: transparent;
+    border: 0;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: var(--modal-max-width);
+    min-width: 320px;
+    width: 80%;
+
+    > .modal-content {
+      background-color: var(--background-color);
+
+      > .modal-header,
+      > .modal-body,
+      > .modal-footer {
+        padding: calc(0.75 * var(--theme-spacing-y)) var(--theme-spacing-x);
+      }
+
+      > .modal-header {
+        background-color: color-mix(in srgb, var(--foreground-color), transparent 90%);
+
+        > .modal-title {
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        > button.btn-close {
+          font-size: 0.75rem;
+        }
+      }
+
+      > .modal-body {
+        max-height: 80vh;
+        overflow-y: auto;
+        padding-bottom: var(--theme-spacing-y);
+        padding-top: var(--theme-spacing-y);
+      }
+
+      > .modal-footer {
+        justify-content: center;
+        padding-bottom: calc(0.25 * var(--theme-spacing-y));
+        padding-top: calc(0.25 * var(--theme-spacing-y));
+      }
+    }
+  }
+
+  @media (max-width: 600px) {
+    > .modal-dialog {
+      width: 90%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    > .modal-dialog {
+      > .modal-content {
+        > .modal-header,
+        > .modal-body,
+        > .modal-footer {
+          padding: calc(0.5 * var(--theme-spacing-y)) calc(0.75 * var(--theme-spacing-x));
+        }
+      }
+    }
+  }
+}
