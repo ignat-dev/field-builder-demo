@@ -137,7 +137,7 @@ export default function FieldBuilder() {
 
           <label htmlFor="selectOrder">Order</label>
           <div className="form__field">
-            <select className="form-select" id="selectOrder" value={order} onChange={onChangeOrder}>
+            <select className="form-select" id="selectOrder" name="order" value={order} onChange={onChangeOrder}>
               {orderOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
