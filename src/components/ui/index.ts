@@ -1,3 +1,4 @@
+export { AccessibleText } from "./AccessibleText/AccessibleText"
 export { Alert } from "./Alert/Alert"
 export { Button } from "./Button/Button"
 export { Card } from "./Card/Card"
