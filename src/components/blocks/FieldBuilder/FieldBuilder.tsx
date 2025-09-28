@@ -1,7 +1,7 @@
 "use client"
 
 import { FIELD_BUILDER_STATE_KEY, MAX_CHOICE_LENGTH, MAX_CHOICES_COUNT } from "@/common/constants"
-import { Alert, Button, Card, Form, Label , Prompt, SelectList} from "@/components/ui"
+import { Alert, Button, Card, Form, Label , LoadingOverlay, Prompt, SelectList} from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
@@ -66,12 +66,7 @@ export default function FieldBuilder() {
 
   return (
     <div className="field-builder">
-      {isLoading && (
-        <div className="field-builder__overlay">
-          <span className="spinner-border text-primary" />
-          <span>Loading, please wait...</span>
-        </div>
-      )}
+      <LoadingOverlay visible={isLoading} />
       <Card className="form-wrapper" errors={errorMessages} title="Field Builder">
         <Form contentClassName="field-builder__content" disabled={isSaving} onSubmit={handleSubmit}>
           <Label accessKey="l" target="inputLabel" text="Label" />

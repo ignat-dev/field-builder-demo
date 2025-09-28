@@ -1,0 +1,35 @@
+.ui-loading-overlay {
+  &,
+  &::before {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &::before {
+    backdrop-filter: blur(0.25rem);
+    background: color-mix(in srgb, var(--foreground-color, #000) 5%, transparent);
+    content: "";
+    z-index: var(--overlay-z-index);
+  }
+
+  > span {
+    align-items: center;
+    background: var(--background-color, #FFF);
+    border-radius: var(--theme-border-radius);
+    box-shadow: 0 0 0.25rem 0.25rem rgba(0, 0, 0, 0.025);
+    display: flex;
+    gap: var(--theme-spacing-x);
+    justify-content: center;
+    margin: 0 auto;
+    padding: calc(2 * var(--theme-spacing-y)) calc(4 * var(--theme-spacing-x));
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    width: max-content;
+    z-index: calc(var(--overlay-z-index) + 1);
+  }
+}
