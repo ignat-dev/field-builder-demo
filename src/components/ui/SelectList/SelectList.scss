@@ -1,0 +1,34 @@
+.ui-select-list {
+  --list-item-height: calc(var(--theme-font-size) * var(--theme-line-height) + var(--theme-input-spacing-y));
+  border: var(--theme-border-width) solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  cursor: default;
+  font-size: var(--theme-font-size);
+  height: calc(var(--list-item-count) * var(--list-item-height) + 2 * var(--theme-input-spacing-y));
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--theme-input-spacing-y) 0;
+
+  &:focus-within {
+    border-color: var(--theme-active-border-color);
+  }
+
+  > .list-group-item {
+    overflow: hidden;
+    padding: calc(0.5 * var(--theme-input-spacing-y)) calc(1.5 * var(--theme-input-spacing-x));
+    text-align: left;
+    text-overflow: ellipsis;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    width: 100%;
+
+    &.active,
+    &:active {
+      background-color: var(--theme-select-active-background-color);
+    }
+
+    &:focus {
+      background-color: color-mix(in srgb, var(--theme-select-active-background-color), var(--foreground-color) 20%);
+    }
+  }
+}
