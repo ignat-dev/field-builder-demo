@@ -30,6 +30,7 @@ export function Button({
   type = "button",
   variant,
   onClick,
+  ...rest
 }: Props) {
   const buttonClassName = useMemo(() => {
     const result = ["btn", className].filter(Boolean)
@@ -52,6 +53,7 @@ export function Button({
   return (
     <span className="ui-button" title={tooltip}>
       <button
+        {...rest}
         accessKey={accessKey}
         className={buttonClassName}
         disabled={disabled || loading}

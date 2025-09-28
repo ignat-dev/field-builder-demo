@@ -217,9 +217,9 @@ function populateFormFields(data: Partial<FieldData>) {
 
   if (data.choices !== undefined) {
     for (const choice of data.choices) {
-      fireEvent.click(screen.getByText("Add"))
+      fireEvent.click(screen.getByTestId("buttonAddChoice"))
       fireEvent.input(screen.getByPlaceholderText("Enter choice value"), { target: { value: choice } })
-      fireEvent.click(screen.getByText("OK"))
+      fireEvent.click(screen.getByTestId("buttonPromptOk"))
     }
   }
 

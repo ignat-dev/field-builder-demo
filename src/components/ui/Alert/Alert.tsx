@@ -37,7 +37,7 @@ export function Alert({ children, id, maxWidth, open, text = "", title, onClose 
 
   function renderFooter(): ReactNode {
     return (
-      <Button text="OK" variant="primary" onClick={onClose} />
+      <Button data-testid="buttonAlertOk" text="OK" variant="primary" onClick={onClose} />
     )
   }
 

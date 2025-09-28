@@ -1,7 +1,7 @@
 "use client"
 
 import { FIELD_BUILDER_STATE_KEY, MAX_CHOICE_LENGTH, MAX_CHOICES_COUNT } from "@/common/constants"
-import { Alert, Button, Card, Form, Prompt } from "@/components/ui"
+import { Alert, Button, Card, Form, Label , Prompt} from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
@@ -74,7 +74,7 @@ export default function FieldBuilder() {
       )}
       <Card className="form-wrapper" errors={errorMessages} title="Field Builder">
         <Form contentClassName="field-builder__content" disabled={isSaving} onSubmit={handleSubmit}>
-          <label htmlFor="inputLabel">Label</label>
+          <Label accessKey="l" target="inputLabel" text="Label" />
           <div className="form__field">
             <input
               className={`form-control ${errorFields.has("label") ? "is-invalid" : ""}`}
@@ -97,13 +97,11 @@ export default function FieldBuilder() {
                 type="checkbox"
                 onChange={onChangeRequired}
               />
-              <label className="form-check-label" htmlFor="inputType">
-                A Value is required
-              </label>
+              <Label className="form-check-label" accessKey="r" target="inputType" text="A Value is required" />
             </div>
           </div>
 
-          <label htmlFor="inputDefaultValue">Default Value</label>
+          <Label accessKey="v" target="inputDefaultValue" text="Default Value" />
           <div className="form__field">
             <input
               className={`form-control ${errorFields.has("default") ? "is-invalid" : ""}`}
@@ -114,7 +112,7 @@ export default function FieldBuilder() {
             />
           </div>
 
-          <label htmlFor="selectChoices">Choices</label>
+          <Label accessKey="h" target="selectChoices" text="Choices" />
           <div className="form__field form__field--vertical">
             <select
               className={`form-select ${errorFields.has("choices") ? "is-invalid" : ""}`}
@@ -134,7 +132,9 @@ export default function FieldBuilder() {
             </select>
             <div className="form__field-actions">
               <Button
+                accessKey="a"
                 appearance="outline"
+                data-testid="buttonAddChoice"
                 disabled={maxChoicesLimitReached}
                 size="small"
                 text="Add"
@@ -143,7 +143,9 @@ export default function FieldBuilder() {
                 onClick={onAddChoice}
               />
               <Button
+                accessKey="m"
                 appearance="outline"
+                data-testid="buttonRemoveChoice"
                 disabled={!selectedChoice}
                 size="small"
                 text="Remove"
@@ -154,7 +156,7 @@ export default function FieldBuilder() {
             </div>
           </div>
 
-          <label htmlFor="selectOrder">Order</label>
+          <Label accessKey="o" target="selectOrder" text="Order" />
           <div className="form__field">
             <select className="form-select" id="selectOrder" name="order" value={order} onChange={onChangeOrder}>
               {orderOptions.map((option) => (
@@ -166,9 +168,22 @@ export default function FieldBuilder() {
           </div>
 
           <div className="form__actions">
-            <Button loading={isSaving} text={isSaving ? "Saving..." : "Save changes"} type="submit" variant="success" />
+            <Button
+              accessKey="s"
+              loading={isSaving}
+              text={isSaving ? "Saving..." : "Save changes"}
+              type="submit"
+              variant="success"
+            />
             {" Or "}
-            <Button appearance="link" disabled={isSaving} text="Cancel" variant="danger" onClick={handleClear} />
+            <Button
+              accessKey="n"
+              appearance="link"
+              disabled={isSaving}
+              text="Cancel"
+              variant="danger"
+              onClick={handleClear}
+            />
           </div>
         </Form>
       </Card>

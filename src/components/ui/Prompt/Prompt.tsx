@@ -96,7 +96,7 @@ export function Prompt({
 
   function renderFooter(): ReactNode {
     return (
-      <Button text="OK" variant="primary" onClick={onSubmit} />
+      <Button data-testid="buttonPromptOk" text="OK" variant="primary" onClick={onSubmit} />
     )
   }
 
