@@ -1,7 +1,7 @@
 "use client"
 
 import { FIELD_BUILDER_STATE_KEY, MAX_CHOICE_LENGTH, MAX_CHOICES_COUNT } from "@/common/constants"
-import { Alert, Button, Card, Form, Label , Prompt} from "@/components/ui"
+import { Alert, Button, Card, Form, Label , Prompt, SelectList} from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
 import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
@@ -114,22 +114,16 @@ export default function FieldBuilder() {
 
           <Label accessKey="h" target="selectChoices" text="Choices" />
           <div className="form__field form__field--vertical">
-            <select
-              className={`form-select ${errorFields.has("choices") ? "is-invalid" : ""}`}
+            <SelectList
+              className={`${errorFields.has("choices") ? "is-invalid" : ""}`}
               id="selectChoices"
+              label="Choices"
               name="choices"
+              items={choices}
+              selectedItem={selectedChoice}
               size={6}
-              value={selectedChoice}
-              onInput={onChangeSelectedChoice}
-            >
-              {choices.length === 0 ? (
-                <option disabled={true}>&nbsp;</option>
-              ) : (
-                choices.map((x) => (
-                  <option key={x} value={x}>{x}</option>
-                ))
-              )}
-            </select>
+              onSelect={onChangeSelectedChoice}
+            />
             <div className="form__field-actions">
               <Button
                 accessKey="a"
@@ -261,8 +255,8 @@ export default function FieldBuilder() {
     saveFormState({ default: e.target.value })
   }
 
-  function onChangeSelectedChoice(e: React.ChangeEvent<HTMLSelectElement>) {
-    setSelectedChoice(e.target.value)
+  function onChangeSelectedChoice(value: string) {
+    setSelectedChoice(value)
   }
 
   function onChangeOrder(e: React.ChangeEvent<HTMLSelectElement>) {

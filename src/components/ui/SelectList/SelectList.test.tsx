@@ -20,6 +20,12 @@ describe(SelectList, () => {
     expect(wrapper).toContainElement(screen.getByText("Tres"))
   })
 
+  it("renders the provided label correctly", () => {
+    const wrapper = renderComponent({ label: "My Custom Label" })
+
+    expect(wrapper).toHaveAttribute("aria-label", "My Custom Label")
+  })
+
   it("highlights the selected item", () => {
     renderComponent({ items: ["Uno", "Dos", "Tres"], selectedItem: "Dos" })
 

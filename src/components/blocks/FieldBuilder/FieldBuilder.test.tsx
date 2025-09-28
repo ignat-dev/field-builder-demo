@@ -102,17 +102,15 @@ describe(FieldBuilder, () => {
       label: apiMockData.label,
       required: apiMockData.required,
       default: apiMockData.default,
-      choices: apiMockData.choices[0],
       order: apiMockData.displayAlpha ? "alphabetical" : "original",
     })
 
     // Check if the choices were populated correctly.
-    const options = Array.from(screen.getByLabelText("Choices").querySelectorAll("option"))
+    const options = Array.from(screen.getByLabelText("Choices").querySelectorAll("[role=option]"))
     const expected = ["Option A", "Option B", "Option C"]
 
     expect(options).toHaveLength(expected.length)
-    expect(options.every((x, i) => x.text === expected[i])).toBe(true)
-    expect(options.every((x, i) => x.value === expected[i])).toBe(true)
+    expect(options.every((x, i) => x.textContent === expected[i])).toBe(true)
   })
 
   it("submits the form data correctly", async () => {
@@ -132,8 +130,8 @@ describe(FieldBuilder, () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
 
-    expect(form).toHaveFormValues({ label: "", required: false, default: "", choices: undefined, order: "original" })
-    expect(screen.getByLabelText("Choices").querySelectorAll("option")).toHaveLength(1)
+    expect(form).toHaveFormValues({ label: "", required: false, default: "", order: "original" })
+    expect(screen.getByLabelText("Choices").querySelectorAll("[role=option]")).toHaveLength(0)
   })
 
   it("saves the state to localStorage on change", async () => {
@@ -161,10 +159,10 @@ describe(FieldBuilder, () => {
     expect(screen.getByLabelText("Order")).toHaveValue(testData.displayAlpha ? "alphabetical" : "original")
 
     const checkbox = screen.getByLabelText<HTMLInputElement>("A Value is required")
-    const select = screen.getByLabelText<HTMLSelectElement>("Choices")
+    const options = screen.getByLabelText<HTMLSelectElement>("Choices").querySelectorAll("[role=option]")
 
     expect(checkbox.attributes.getNamedItem("checked")).toEqual(testData.required || null)
-    expect(Array.from(select.options).map((x) => x.value)).toEqual(testData.choices)
+    expect(Array.from(options).map((x) => x.textContent)).toEqual(testData.choices)
   })
 
   it("loads the state from API when newer", async () => {
