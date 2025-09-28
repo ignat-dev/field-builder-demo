@@ -1,5 +1,4 @@
-import { type ReactNode } from "react"
-import { useAltKeyActive } from "../../hooks/useAltKeyActive"
+import { AccessibleText } from "../AccessibleText/AccessibleText"
 
 import "./Label.scss"
 
@@ -11,31 +10,11 @@ export interface Props {
 }
 
 export function Label({ accessKey, className, target, text }: Props) {
-  const altActive = useAltKeyActive()
   const key = accessKey ? accessKey.substring(0, 1).toLowerCase() : ""
-  const index = key ? text.toLowerCase().indexOf(key) : -1
 
   return (
-    <label className={`ui-label ${className ?? ""}`.trim()} htmlFor={target} accessKey={key || undefined}>
-      {renderText()}
+    <label className={`ui-label ${className ?? ""}`.trim()} accessKey={key || undefined} htmlFor={target}>
+      <AccessibleText accessKey={accessKey} text={text} />
     </label>
   )
-
-  function renderText(): ReactNode {
-    if (!key || index === -1) {
-      return (
-        <span>{text}</span>
-      )
-    }
-
-    return (
-      <span>
-        {text.slice(0, index)}
-        <span className={altActive ? "ui-label__accesskey" : ""}>
-          {text[index]}
-        </span>
-        {text.slice(index + 1)}
-      </span>
-    )
-  }
 }

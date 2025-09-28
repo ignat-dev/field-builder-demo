@@ -91,6 +91,12 @@ describe(Button, () => {
     expect(screen.getByRole("button").attributes.getNamedItem("type")?.value).toBe("submit")
   })
 
+  it("sets correctly the provided accessKey", () => {
+    renderComponent({ accessKey: "x" })
+
+    expect(screen.getByRole("button").attributes.getNamedItem("accessKey")?.value).toBe("x")
+  })
+
   it("calls the provided onClick handler", () => {
     const onClick = vi.fn()
 

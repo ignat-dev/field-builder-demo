@@ -1,9 +1,10 @@
-import type { MouseEvent } from "react"
-import { useMemo } from "react"
+import { type MouseEvent, useMemo } from "react"
+import { AccessibleText } from "../AccessibleText/AccessibleText"
 
 import "./Button.scss"
 
 export interface Props {
+  accessKey?: string
   appearance?: "link" | "outline"
   className?: string
   disabled?: boolean
@@ -18,6 +19,7 @@ export interface Props {
 }
 
 export function Button({
+  accessKey,
   appearance,
   className,
   disabled,
@@ -49,11 +51,17 @@ export function Button({
 
   return (
     <span className="ui-button" title={tooltip}>
-      <button className={buttonClassName} disabled={disabled || loading} type={type} onClick={onClick}>
+      <button
+        accessKey={accessKey}
+        className={buttonClassName}
+        disabled={disabled || loading}
+        type={type}
+        onClick={onClick}
+      >
         {loading && (
           <span className="spinner-border spinner-border-sm" />
         )}
-        <span>{text}</span>
+        <AccessibleText accessKey={accessKey} text={text} />
       </button>
     </span>
   )
