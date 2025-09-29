@@ -37,15 +37,15 @@ describe(FieldBuilder, () => {
     expect(wrapper.className).toBe("field-builder")
 
     expect(card).toBeInTheDocument()
-    expect(card).toHaveTextContent("Field Builder")
+    expect(card).toHaveTextContent("info.title")
 
     expect(form).toBeInTheDocument()
     expect(form).toHaveClass("field-builder__content")
     expect(form).not.toHaveAttribute("disabled")
 
     const expectedActionProps = [
-      { text: "Save changes", type: "submit" },
-      { text: "Cancel", type: "button" }
+      { text: "actions.saveChanges.text", type: "submit" },
+      { text: "actions.cancel.text", type: "button" }
     ]
 
     for (const [i, button] of buttons.entries()) {
@@ -59,16 +59,16 @@ describe(FieldBuilder, () => {
   it("renders the form fields correctly", async () => {
     await renderComponent()
 
-    expect(screen.getByLabelText("Label")).toBeInTheDocument()
-    expect(screen.getByLabelText("A Value is required")).toBeInTheDocument()
-    expect(screen.getByLabelText("Default Value")).toBeInTheDocument()
-    expect(screen.getByLabelText("Choices")).toBeInTheDocument()
-    expect(screen.getByLabelText("Order")).toBeInTheDocument()
+    expect(screen.getByLabelText("fields.label.label")).toBeInTheDocument()
+    expect(screen.getByLabelText("fields.valueRequired.label")).toBeInTheDocument()
+    expect(screen.getByLabelText("fields.default.label")).toBeInTheDocument()
+    expect(screen.getByLabelText("fields.choices.label")).toBeInTheDocument()
+    expect(screen.getByLabelText("fields.order.label")).toBeInTheDocument()
   })
 
   it.each([
-    ["Save changes", "submit"],
-    ["Cancel", "button"],
+    ["actions.saveChanges.text", "submit"],
+    ["actions.cancel.text", "button"],
   ])("renders '%s' action button correctly", async (text, type) => {
     const wrapper = await renderComponent()
     const button = wrapper.querySelector(".form__actions")?.querySelector(`button[type=${type}]`)
@@ -83,11 +83,11 @@ describe(FieldBuilder, () => {
   it("renders initial loading state correctly", async () => {
     const renderPromise = renderComponent()
 
-    expect(screen.getByText("Loading, please wait...")).toBeInTheDocument()
+    expect(screen.getByText("info.loadingText")).toBeInTheDocument()
 
     await renderPromise
 
-    expect(screen.queryByText("Loading, please wait...")).not.toBeInTheDocument()
+    expect(screen.queryByText("info.loadingText")).not.toBeInTheDocument()
   })
 
   it("loads and populates data correctly", async () => {
@@ -106,7 +106,7 @@ describe(FieldBuilder, () => {
     })
 
     // Check if the choices were populated correctly.
-    const options = Array.from(screen.getByLabelText("Choices").querySelectorAll("[role=option]"))
+    const options = Array.from(screen.getByLabelText("fields.choices.label").querySelectorAll("[role=option]"))
     const expected = ["Option A", "Option B", "Option C"]
 
     expect(options).toHaveLength(expected.length)
@@ -116,9 +116,9 @@ describe(FieldBuilder, () => {
   it("submits the form data correctly", async () => {
     await renderComponent()
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+    fireEvent.click(screen.getByRole("button", { name: "actions.cancel.text" }))
     populateFormFields(testData)
-    fireEvent.click(screen.getByRole("button", { name: "Save changes" }))
+    fireEvent.click(screen.getByRole("button", { name: "actions.saveChanges.text" }))
     await waitFor(() => { expect(saveField).toHaveBeenCalled() })
 
     expect(saveField).toHaveBeenCalledWith({ type: "multi-select", timestamp: expect.any(Number), ...testData })
@@ -128,16 +128,16 @@ describe(FieldBuilder, () => {
     const wrapper = await renderComponent()
     const form = wrapper.querySelector("fieldset")
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+    fireEvent.click(screen.getByRole("button", { name: "actions.cancel.text" }))
 
     expect(form).toHaveFormValues({ label: "", required: false, default: "", order: "original" })
-    expect(screen.getByLabelText("Choices").querySelectorAll("[role=option]")).toHaveLength(0)
+    expect(screen.getByLabelText("fields.choices.label").querySelectorAll("[role=option]")).toHaveLength(0)
   })
 
   it("saves the state to localStorage on change", async () => {
     await renderComponent()
 
-    fireEvent.click(screen.getByRole("button", { name: "Cancel" }))
+    fireEvent.click(screen.getByRole("button", { name: "actions.cancel.text" }))
     populateFormFields(testData)
 
     const state = storage.get<FieldData>(`${FIELD_BUILDER_STATE_KEY}:${fieldId}`) ?? {} as FieldData
@@ -154,12 +154,12 @@ describe(FieldBuilder, () => {
 
     await renderComponent()
 
-    expect(screen.getByLabelText("Label")).toHaveValue(testData.label)
-    expect(screen.getByLabelText("Default Value")).toHaveValue(testData.default)
-    expect(screen.getByLabelText("Order")).toHaveValue(testData.displayAlpha ? "alphabetical" : "original")
+    expect(screen.getByLabelText("fields.label.label")).toHaveValue(testData.label)
+    expect(screen.getByLabelText("fields.default.label")).toHaveValue(testData.default)
+    expect(screen.getByLabelText("fields.order.label")).toHaveValue(testData.displayAlpha ? "alphabetical" : "original")
 
-    const checkbox = screen.getByLabelText<HTMLInputElement>("A Value is required")
-    const options = screen.getByLabelText<HTMLSelectElement>("Choices").querySelectorAll("[role=option]")
+    const checkbox = screen.getByLabelText<HTMLInputElement>("fields.valueRequired.label")
+    const options = screen.getByLabelText<HTMLSelectElement>("fields.choices.label").querySelectorAll("[role=option]")
 
     expect(checkbox.attributes.getNamedItem("checked")).toEqual(testData.required || null)
     expect(Array.from(options).map((x) => x.textContent)).toEqual(testData.choices)
@@ -183,8 +183,8 @@ describe(FieldBuilder, () => {
     await renderComponent()
 
     // Verify that the form is populated with the newer state.
-    expect(screen.getByLabelText("Label")).toHaveValue("New Field Label")
-    expect(screen.getByLabelText("Default Value")).toHaveValue("New Default Value")
+    expect(screen.getByLabelText("fields.label.label")).toHaveValue("New Field Label")
+    expect(screen.getByLabelText("fields.default.label")).toHaveValue("New Default Value")
   })
 })
 
@@ -198,11 +198,11 @@ async function renderComponent(): Promise<HTMLDivElement> {
 
 function populateFormFields(data: Partial<FieldData>) {
   if (data.label !== undefined) {
-    fireEvent.change(screen.getByLabelText("Label"), { target: { value: data.label } })
+    fireEvent.change(screen.getByLabelText("fields.label.label"), { target: { value: data.label } })
   }
 
   if (data.required !== undefined) {
-    const checkbox = screen.getByLabelText<HTMLInputElement>("A Value is required")
+    const checkbox = screen.getByLabelText<HTMLInputElement>("fields.valueRequired.label")
 
     if (checkbox.checked !== data.required) {
       fireEvent.click(checkbox)
@@ -210,13 +210,13 @@ function populateFormFields(data: Partial<FieldData>) {
   }
 
   if (data.default !== undefined) {
-    fireEvent.change(screen.getByLabelText("Default Value"), { target: { value: data.default } })
+    fireEvent.change(screen.getByLabelText("fields.default.label"), { target: { value: data.default } })
   }
 
   if (data.choices !== undefined) {
     for (const choice of data.choices) {
       fireEvent.click(screen.getByTestId("buttonAddChoice"))
-      fireEvent.input(screen.getByPlaceholderText("Enter choice value"), { target: { value: choice } })
+      fireEvent.input(screen.getByPlaceholderText("dialogs.addChoice.placeholder"), { target: { value: choice } })
       fireEvent.click(screen.getByTestId("buttonPromptOk"))
     }
   }
@@ -224,6 +224,6 @@ function populateFormFields(data: Partial<FieldData>) {
   if (data.displayAlpha !== undefined) {
     const order = data.displayAlpha ? "alphabetical" : "original"
 
-    fireEvent.change(screen.getByLabelText("Order"), { target: { value: order } })
+    fireEvent.change(screen.getByLabelText("fields.order.label"), { target: { value: order } })
   }
 }

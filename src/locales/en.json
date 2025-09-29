@@ -1,2 +1,73 @@
 {
+  "blocks": {
+    "FieldBuilder": {
+      "actions": {
+        "add": {
+          "text": "Add"
+        },
+        "cancel": {
+          "text": "Cancel"
+        },
+        "remove": {
+          "text": "Remove"
+        },
+        "saveChanges": {
+          "text": "Save changes"
+        },
+        "saving": {
+          "text": "Saving..."
+        }
+      },
+      "dialogs": {
+        "addChoice": {
+          "placeholder": "Enter choice value",
+          "title": "Add new choice"
+        },
+        "choiceExists": {
+          "text": "A choice \"{{0}}\" already exists, please enter a different value.",
+          "title": "Choice already exists"
+        }
+      },
+      "fields": {
+        "choices": {
+          "label": "Choices"
+        },
+        "default": {
+          "label": "Default Value"
+        },
+        "label": {
+          "label": "Label"
+        },
+        "multiSelect": {
+          "label": "Multi-select"
+        },
+        "order": {
+          "label": "Order",
+          "options": {
+            "alphabetical": "Display choices in Alphabetical",
+            "original": "Display choices in original order"
+          }
+        },
+        "type": {
+          "label": "Type"
+        },
+        "valueRequired": {
+          "label": "A Value is required"
+        }
+      },
+      "info": {
+        "loadingText": "Loading, please wait...",
+        "title": "Field Builder"
+      },
+      "strings": {
+        "or": "Or"
+      },
+      "tooltips": {
+        "addChoice": "Add a new choice to the list",
+        "maxChoices": "Maximum choices limit reached",
+        "removeChoice": "Remove the selected choice from the list",
+        "selectChoice": "Select a choice to remove"
+      }
+    }
+  }
 }

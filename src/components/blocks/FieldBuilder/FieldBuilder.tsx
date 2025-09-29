@@ -1,8 +1,9 @@
 "use client"
 
 import { FIELD_BUILDER_STATE_KEY, MAX_CHOICE_LENGTH, MAX_CHOICES_COUNT } from "@/common/constants"
-import { Alert, Button, Card, Form, Label , LoadingOverlay, Prompt, SelectList} from "@/components/ui"
+import { Alert, Button, Card, Form, Label, LoadingOverlay, Prompt, SelectList } from "@/components/ui"
 import { getField, saveField } from "@/lib/api"
+import { useI18n } from "@/lib/i18n"
 import { storage } from "@/lib/storage"
 import { validateFieldData } from "@/lib/validation"
 import type { FieldData, ValidationError } from "@/types"
@@ -11,9 +12,10 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import "./FieldBuilder.scss"
 
 export default function FieldBuilder() {
+  const { t } = useI18n("blocks.FieldBuilder")
   const orderOptions = [
-    { value: "original", label: "Display choices in original order" },
-    { value: "alphabetical", label: "Display choices in Alphabetical" },
+    { value: "original", label: t("fields.order.options.original") },
+    { value: "alphabetical", label: t("fields.order.options.alphabetical") },
   ]
 
   const fieldId = "123" // Using a hardcoded ID for demo purposes.
@@ -66,10 +68,10 @@ export default function FieldBuilder() {
 
   return (
     <div className="field-builder">
-      <LoadingOverlay visible={isLoading} />
-      <Card className="form-wrapper" errors={errorMessages} title="Field Builder">
+      <LoadingOverlay text={t("info.loadingText")} visible={isLoading} />
+      <Card className="form-wrapper" errors={errorMessages} title={t("info.title")}>
         <Form contentClassName="field-builder__content" disabled={isSaving} onSubmit={handleSubmit}>
-          <Label accessKey="l" target="inputLabel" text="Label" />
+          <Label accessKey="l" target="inputLabel" text={t("fields.label.label")} />
           <div className="form__field">
             <input
               className={`form-control ${errorFields.has("label") ? "is-invalid" : ""}`}
@@ -80,9 +82,9 @@ export default function FieldBuilder() {
             />
           </div>
 
-          <label>Type</label>
+          <Label accessKey="t" text={t("fields.type.label")} />
           <div className="form__field">
-            <span>Multi-select</span>
+            <span>{t("fields.multiSelect.label")}</span>
             <div className="form-check">
               <input
                 className="form-check-input"
@@ -92,11 +94,11 @@ export default function FieldBuilder() {
                 type="checkbox"
                 onChange={onChangeRequired}
               />
-              <Label className="form-check-label" accessKey="r" target="inputType" text="A Value is required" />
+              <Label className="form-check-label" accessKey="r" target="inputType" text={t("fields.valueRequired.label")} />
             </div>
           </div>
 
-          <Label accessKey="v" target="inputDefaultValue" text="Default Value" />
+          <Label accessKey="v" target="inputDefaultValue" text={t("fields.default.label")} />
           <div className="form__field">
             <input
               className={`form-control ${errorFields.has("default") ? "is-invalid" : ""}`}
@@ -107,12 +109,12 @@ export default function FieldBuilder() {
             />
           </div>
 
-          <Label accessKey="h" target="selectChoices" text="Choices" />
+          <Label accessKey="h" target="selectChoices" text={t("fields.choices.label")} />
           <div className="form__field form__field--vertical">
             <SelectList
               className={`${errorFields.has("choices") ? "is-invalid" : ""}`}
               id="selectChoices"
-              label="Choices"
+              label={t("fields.choices.label")}
               name="choices"
               items={choices}
               selectedItem={selectedChoice}
@@ -126,8 +128,8 @@ export default function FieldBuilder() {
                 data-testid="buttonAddChoice"
                 disabled={maxChoicesLimitReached}
                 size="small"
-                text="Add"
-                tooltip={!maxChoicesLimitReached ? "Add a new choice to the list" : "Maximum choices limit reached"}
+                text={t("actions.add.text")}
+                tooltip={!maxChoicesLimitReached ? t("tooltips.addChoice") : t("tooltips.maxChoices")}
                 variant="light"
                 onClick={onAddChoice}
               />
@@ -137,15 +139,15 @@ export default function FieldBuilder() {
                 data-testid="buttonRemoveChoice"
                 disabled={!selectedChoice}
                 size="small"
-                text="Remove"
-                tooltip={selectedChoice ? "Remove the selected choice from the list" : "Select a choice to remove"}
+                text={t("actions.remove.text")}
+                tooltip={selectedChoice ? t("tooltips.removeChoice") : t("tooltips.selectChoice")}
                 variant="light"
                 onClick={onRemoveChoice}
               />
             </div>
           </div>
 
-          <Label accessKey="o" target="selectOrder" text="Order" />
+          <Label accessKey="o" target="selectOrder" text={t("fields.order.label")} />
           <div className="form__field">
             <select className="form-select" id="selectOrder" name="order" value={order} onChange={onChangeOrder}>
               {orderOptions.map((option) => (
@@ -160,16 +162,16 @@ export default function FieldBuilder() {
             <Button
               accessKey="s"
               loading={isSaving}
-              text={isSaving ? "Saving..." : "Save changes"}
+              text={isSaving ? t("actions.saving.text") : t("actions.saveChanges.text")}
               type="submit"
               variant="success"
             />
-            {" Or "}
+            {` ${t("strings.or")} `}
             <Button
               accessKey="n"
               appearance="link"
               disabled={isSaving}
-              text="Cancel"
+              text={t("actions.cancel.text")}
               variant="danger"
               onClick={handleClear}
             />
@@ -179,9 +181,9 @@ export default function FieldBuilder() {
       <Alert {...alertInfo} open={isAlertOpen} onClose={onCloseAlert} />
       <Prompt
         open={isPromptOpen}
-        title="Add a choice"
+        title={t("dialogs.addChoice.title")}
         maxLength={MAX_CHOICE_LENGTH}
-        placeholder="Enter choice value"
+        placeholder={t("dialogs.addChoice.placeholder")}
         onClose={onClosePrompt}
       />
     </div>
@@ -294,8 +296,8 @@ export default function FieldBuilder() {
         setSelectedChoice(text)
       } else {
         setAlertInfo({
-          title: "Choice already exists",
-          text: `A choice "${duplicate}" already exists, please enter a different value.`,
+          title: t("dialogs.choiceExists.title"),
+          text: t("dialogs.choiceExists.text", duplicate),
         })
       }
     }
