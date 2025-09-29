@@ -1,0 +1,49 @@
+{
+  "blocks": {
+    "FieldBuilder": {
+      "actions": {
+        "add": { "text": "Hinzufügen" },
+        "cancel": { "text": "Abbrechen" },
+        "remove": { "text": "Entfernen" },
+        "saveChanges": { "text": "Änderungen speichern" },
+        "saving": { "text": "Wird gespeichert..." }
+      },
+      "dialogs": {
+        "addChoice": {
+          "placeholder": "Wert der Auswahl eingeben",
+          "title": "Neue Auswahl hinzufügen"
+        },
+        "choiceExists": {
+          "text": "Die Auswahl \"{{0}}\" existiert bereits, bitte geben Sie einen anderen Wert ein.",
+          "title": "Auswahl existiert bereits"
+        }
+      },
+      "fields": {
+        "choices": { "label": "Auswahlen" },
+        "default": { "label": "Standardwert" },
+        "label": { "label": "Bezeichnung" },
+        "multiSelect": { "label": "Mehrfachauswahl" },
+        "order": {
+          "label": "Reihenfolge",
+          "options": {
+            "alphabetical": "Auswahlen alphabetisch anzeigen",
+            "original": "Auswahlen in Originalreihenfolge anzeigen"
+          }
+        },
+        "type": { "label": "Typ" },
+        "valueRequired": { "label": "Ein Wert ist erforderlich" }
+      },
+      "info": {
+        "loadingText": "Wird geladen, bitte warten...",
+        "title": "Feld-Generator"
+      },
+      "strings": { "or": "Oder" },
+      "tooltips": {
+        "addChoice": "Neue Auswahl zur Liste hinzufügen",
+        "maxChoices": "Maximale Anzahl an Auswahlen erreicht",
+        "removeChoice": "Ausgewählte Auswahl aus der Liste entfernen",
+        "selectChoice": "Bitte Auswahl zum Entfernen auswählen"
+      }
+    }
+  }
+}

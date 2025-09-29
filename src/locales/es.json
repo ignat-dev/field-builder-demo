@@ -1,0 +1,49 @@
+{
+  "blocks": {
+    "FieldBuilder": {
+      "actions": {
+        "add": { "text": "Añadir" },
+        "cancel": { "text": "Cancelar" },
+        "remove": { "text": "Eliminar" },
+        "saveChanges": { "text": "Guardar cambios" },
+        "saving": { "text": "Guardando..." }
+      },
+      "dialogs": {
+        "addChoice": {
+          "placeholder": "Ingrese el valor de la opción",
+          "title": "Agregar nueva opción"
+        },
+        "choiceExists": {
+          "text": "La opción \"{{0}}\" ya existe, por favor ingrese un valor diferente.",
+          "title": "La opción ya existe"
+        }
+      },
+      "fields": {
+        "choices": { "label": "Opciones" },
+        "default": { "label": "Valor predeterminado" },
+        "label": { "label": "Etiqueta" },
+        "multiSelect": { "label": "Selección múltiple" },
+        "order": {
+          "label": "Orden",
+          "options": {
+            "alphabetical": "Mostrar opciones en orden alfabético",
+            "original": "Mostrar opciones en el orden original"
+          }
+        },
+        "type": { "label": "Tipo" },
+        "valueRequired": { "label": "Se requiere un valor" }
+      },
+      "info": {
+        "loadingText": "Cargando, por favor espere...",
+        "title": "Constructor de campos"
+      },
+      "strings": { "or": "O" },
+      "tooltips": {
+        "addChoice": "Agregar una nueva opción a la lista",
+        "maxChoices": "Se alcanzó el límite máximo de opciones",
+        "removeChoice": "Eliminar la opción seleccionada de la lista",
+        "selectChoice": "Seleccione una opción para eliminar"
+      }
+    }
+  }
+}
