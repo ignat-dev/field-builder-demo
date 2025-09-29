@@ -1,3 +1,4 @@
+import { I18nProvider } from "@/lib/i18n"
 import type { Metadata } from "next"
 
 import "../styles/themes/bootstrap.scss"
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   )
