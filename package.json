@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build --turbopack",
+    "build:themes": "node src/scripts/buildThemes.js",
     "dev": "next dev --turbopack",
     "deploy": "cross-env NODE_ENV=production npm run build && firebase deploy --only hosting",
     "lint": "eslint",
@@ -42,7 +43,7 @@
     "eslint-config-next": "^15",
     "eslint-plugin-react": "^7",
     "jsdom": "^27",
-    "sass-embedded": "^1",
+    "sass": "^1",
     "typescript": "^5",
     "vite-tsconfig-paths": "^5",
     "vitest": "^3"
