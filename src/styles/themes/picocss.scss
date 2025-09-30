@@ -1,0 +1,126 @@
+@use "@picocss/pico/scss/pico" with (
+  $enable-classes: true,
+  $enable-semantic-container: true,
+  $modules: (
+    "components/accordion": false,
+    "components/card": true,
+    "components/dropdown": true,
+    "components/loading": true,
+    "components/modal": true,
+    "components/nav": false,
+    "components/progress": true,
+    "components/tooltip": true,
+    "content/code": true,
+    "forms/input-color": false,
+    "forms/input-date": false,
+    "forms/input-file": false,
+    "forms/input-range": false,
+    "forms/input-search": false,
+    "utilities/accessibility": false,
+    "utilities/reduce-motion": false,
+  ),
+  $theme-color: "green",
+);
+
+body {
+  --pico-form-element-spacing-horizontal: 0.75rem;
+  --pico-form-element-spacing-vertical: 0.25rem;
+}
+
+input.form-control,
+label,
+select,
+textarea {
+  margin-bottom: 0;
+}
+
+article {
+  --theme-card-border-color: var(--pico-card-border-color);
+  --theme-card-border-radius: var(--pico-border-radius);
+  --theme-card-border-width: 1.5px;
+  --theme-card-header-background-color: var(--pico-card-sectioning-background-color);
+}
+
+button {
+  &.btn {
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  &.btn-sm {
+    font-size: 0.875em;
+  }
+
+  &.btn-lg {
+    font-size: 1.25em;
+  }
+
+  &.btn-danger {
+    --pico-color-link: #D64550;
+    --pico-primary-background: #D64550;
+    --pico-primary-border: color-mix(in srgb, var(--pico-primary-background), #000 20%);
+  }
+
+  &.btn-link {
+    --pico-color: var(--pico-color-link);
+    --pico-form-element-spacing-horizontal: 0;
+    --pico-primary-background: transparent;
+    --pico-primary-border: transparent;
+    --pico-primary-hover-background: transparent;
+    --pico-primary-hover-border: transparent;
+    --pico-primary-inverse: color-mix(in srgb, var(--pico-color-link), #000 20%);
+  }
+}
+
+fieldset {
+  margin: 0;
+}
+
+.form-check > .form-check-input,
+.form-control,
+.form-select {
+  box-shadow: none !important;
+}
+
+.form-check-input {
+  background-color: transparent!important;
+  background-image: none !important;
+  position: relative;
+
+  &:checked:after {
+    background-color: var(--pico-primary-background);
+    content: "";
+    display: inline-block;
+    height: 1.05rem;
+    left: 0;
+    mask: var(--pico-icon-checkbox) no-repeat center/contain;
+    position: absolute;
+    top: 0;
+    width: 1.05rem;
+  }
+}
+
+.form-select {
+  background-image: none;
+  padding: 0.5rem 1.25rem;
+
+  &[size] {
+    overflow-y: auto;
+    padding: 0.5rem 0 !important;
+  }
+
+  > option {
+    overflow: hidden;
+    padding: 0.25rem 1.25rem;
+    text-overflow: ellipsis;
+
+    &:checked {
+      background-color: #F5F5F5;
+      color: inherit;
+    }
+  }
+
+  &:disabled > option {
+    background-color: transparent;
+  }
+}

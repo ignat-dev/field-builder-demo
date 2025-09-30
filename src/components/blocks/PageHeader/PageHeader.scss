@@ -1,0 +1,36 @@
+.page-header {
+  align-items: center;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--theme-spacing-x);
+  justify-content: space-between;
+  max-width: none;
+  padding: var(--theme-spacing-y) var(--theme-spacing-x);
+  position: sticky;
+  top: 0;
+  width: 100%;
+
+  > h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  > .settings-wrapper {
+    align-items: center;
+    display: flex;
+    gap: var(--theme-spacing-x);
+
+    > .setting-switcher {
+      align-items: center;
+      display: flex;
+      gap: calc(0.5 * var(--theme-spacing-x));
+
+      > select {
+        min-width: 100px;
+        width: fit-content;
+      }
+    }
+  }
+}

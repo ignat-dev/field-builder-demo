@@ -1,6 +1,7 @@
-@import "~bootstrap/dist/css/bootstrap";
+// @import "~bootstrap/scss/bootstrap";
+@import "bootstrap/dist/css/bootstrap";
 
-:root {
+body {
   --background-color: var(--bs-white);
   --foreground-color: var(--bs-black);
   --theme-active-border-color: #86b7fe;
@@ -11,13 +12,16 @@
   --theme-color-info: var(--bs-info);
   --theme-color-success: var(--bs-success);
   --theme-color-warning: var(--bs-warning);
-  --theme-font-size: var(--bs-body-font-size);
   --theme-input-spacing-x: calc(0.75 * var(--theme-spacing-x, 1rem));
   --theme-input-spacing-y: calc(0.375 * var(--theme-spacing-y, 1rem));
-  --theme-line-height: var(--bs-body-line-height, 1.5);
   --theme-select-active-background-color: #F5F5F5;
   --theme-spacing-x: var(--bs-body-spacing-x, 1rem);
   --theme-spacing-y: var(--bs-body-spacing-y, 1rem);
+
+  --bs-body-font-family: var(--theme-font-family);
+  --bs-body-font-size: var(--theme-font-size);
+  --bs-body-font-weight: var(--theme-font-weight);
+  --bs-body-line-height: var(--theme-line-height);
 }
 
 .btn {
@@ -101,21 +105,16 @@
   --theme-card-border-width: var(--bs-border-width);
   --theme-card-spacing-x: calc(2.5 * var(--theme-spacing-x));
   --theme-card-spacing-y: calc(0.75 * var(--theme-spacing-y));
+  --theme-card-border-color: var(--bs-card-border-color);
+  --theme-card-border-radius: var(--bs-card-border-radius);
+  --theme-card-border-width: var(--bs-card-border-width);
+  --theme-card-header-background-color: var(--bs-card-cap-bg);
 
-  > .card-header {
-    font-weight: 700;
-  }
+  width: 100%;
 
   > .card-body {
     --bs-card-spacer-x: var(--theme-card-spacing-x);
     --bs-card-spacer-y: calc(2 * var(--theme-card-spacing-y));
-
-    font-weight: 400;
-  }
-
-  @media screen and (max-width: 520px) {
-    --theme-card-spacing-x: var(--theme-spacing-x);
-    --theme-card-spacing-y: calc(0.5 * var(--theme-spacing-y));
   }
 }
 

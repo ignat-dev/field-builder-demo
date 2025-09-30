@@ -1,0 +1,47 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-weight: 500;
+  padding: calc(0.25 * var(--theme-spacing-y)) calc(0.5 * var(--theme-spacing-x));
+
+  &:not(.btn-sm) {
+    font-size: 1rem;
+  }
+}
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  border: 1px solid var(--theme-border-color);
+  border-radius: var(--theme-border-radius);
+  font-size: 1rem;
+  padding: calc(0.25 * var(--theme-spacing-y)) calc(0.5 * var(--theme-spacing-x));
+  width: 100%;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: calc(0.5 * var(--theme-spacing-x));
+}
+
+select {
+  &[size] {
+    overflow-y: auto;
+    padding: 0.5rem 0 !important;
+  }
+
+  > option {
+    overflow: hidden;
+    padding: calc(0.25 * var(--theme-spacing-y)) calc(1.25 * var(--theme-spacing-x));
+    text-overflow: ellipsis;
+  }
+}

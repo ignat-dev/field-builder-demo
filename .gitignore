@@ -35,6 +35,8 @@ next-env.d.ts
 # production
 /build
 /dist
+/public/themes
+/public/themes.json
 
 # testing
 /coverage
