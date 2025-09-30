@@ -44,6 +44,19 @@
         "removeChoice": "Ausgewählte Auswahl aus der Liste entfernen",
         "selectChoice": "Bitte Auswahl zum Entfernen auswählen"
       }
+    },
+    "PageHeader": {
+      "info": {
+        "title": "Feld-Generator Demo"
+      },
+      "settings": {
+        "language": {
+          "label": "Sprache"
+        },
+        "theme": {
+          "label": "Thema"
+        }
+      }
     }
   }
 }

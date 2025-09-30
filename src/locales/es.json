@@ -44,6 +44,19 @@
         "removeChoice": "Eliminar la opción seleccionada de la lista",
         "selectChoice": "Seleccione una opción para eliminar"
       }
+    },
+    "PageHeader": {
+      "info": {
+        "title": "Demostración del Generador de Campos"
+      },
+      "settings": {
+        "language": {
+          "label": "Idioma"
+        },
+        "theme": {
+          "label": "Tema"
+        }
+      }
     }
   }
 }
