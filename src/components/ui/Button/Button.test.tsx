@@ -34,7 +34,7 @@ describe(Button, () => {
     ])("%s", (variant, expectedClass) => {
       renderComponent({ variant: variant as Props["variant"] })
 
-      expect(screen.getByRole("button").className).toBe(`btn ${expectedClass}`)
+      expect(screen.getByRole("button").classList).toContain(expectedClass)
     })
   })
 
@@ -45,7 +45,7 @@ describe(Button, () => {
     ])("%s", (appearance, expectedClass) => {
       renderComponent({ variant: "dark", appearance: appearance as Props["appearance"] })
 
-      expect(screen.getByRole("button").classList.toString()).toBe(`btn ${expectedClass}`)
+      expect(screen.getByRole("button").className).toContain(expectedClass)
     })
   })
 

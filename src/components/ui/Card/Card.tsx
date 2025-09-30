@@ -12,11 +12,11 @@ export interface Props {
 
 export function Card({ children, className, contentClassName, errors, title }: Props) {
   return (
-    <div className={`ui-card card ${className ?? ""}`.trim()}>
+    <article className={`ui-card card ${className ?? ""}`.trim()}>
       {title && (
-        <div className="card-header">
+        <header className="card-header">
           {title}
-        </div>
+        </header>
       )}
       {errors && errors.length > 0 && (
         <div className="ui-card__notification-area type-danger">
@@ -27,6 +27,6 @@ export function Card({ children, className, contentClassName, errors, title }: P
       <div className={`card-body ${contentClassName}`}>
         {children}
       </div>
-    </div>
+    </article>
   )
 }

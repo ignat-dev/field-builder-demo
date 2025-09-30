@@ -39,6 +39,14 @@ export function Button({
       result.push(appearance === "outline" ? `btn-outline-${variant}` : `btn-${variant}`)
     }
 
+    if (appearance && appearance === "outline") {
+      result.push("outline")
+    }
+
+    if (variant === "light") {
+      result.push("secondary")
+    }
+
     if (appearance && appearance !== "outline") {
       result.push(`btn-${appearance}`)
     }

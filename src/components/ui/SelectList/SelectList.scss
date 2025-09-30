@@ -14,7 +14,15 @@
   }
 
   > .list-group-item {
+    appearance: none;
+    background-color: var(--background-color);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: var(--foreground-color);
+    display: block;
     overflow: hidden;
+    margin: 0;
     padding: calc(0.5 * var(--theme-input-spacing-y)) calc(1.5 * var(--theme-input-spacing-x));
     text-align: left;
     text-overflow: ellipsis;
@@ -25,10 +33,12 @@
     &.active,
     &:active {
       background-color: var(--theme-select-active-background-color);
+      outline: none;
     }
 
     &:focus {
       background-color: color-mix(in srgb, var(--theme-select-active-background-color), var(--foreground-color) 20%);
+      outline: none;
     }
   }
 }
